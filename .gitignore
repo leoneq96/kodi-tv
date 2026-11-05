@@ -1,0 +1,6 @@
+backup/
+reference/
+*.log
+*.key
+id_*
+.env
