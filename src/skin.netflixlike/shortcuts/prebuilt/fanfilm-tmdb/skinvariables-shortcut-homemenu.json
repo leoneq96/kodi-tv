@@ -1,0 +1,71 @@
+[
+    {
+        "label": "FanFilm",
+        "path": "plugin://plugin.video.fanfilm/",
+        "icon": "special://skin/extras/icons/fanfilm.png",
+        "target": "videos",
+        "guid": "guid-fanfilm-main",
+        "submenulist_label": "FanFilm",
+        "submenulist_path": "plugin://plugin.video.fanfilm/",
+        "submenulist_icon": "special://skin/extras/icons/fanfilm.png",
+        "submenulist_target": "videos",
+        "widgets": [
+            {
+                "label": "Kontynuuj oglądanie",
+                "icon": "special://skin/extras/icons/recentlyadded.png",
+                "path": "plugin://plugin.video.fanfilm/history/",
+                "target": "videos",
+                "widget_style": "Landscape"
+            },
+            {
+                "label": "Filmy",
+                "path": "plugin://plugin.video.fanfilm/movie",
+                "icon": "special://skin/extras/icons/film.png",
+                "target": "videos",
+                "widget_style": "Landscape"
+            },
+            {
+                "label": "Seriale",
+                "path": "plugin://plugin.video.fanfilm/tvshow",
+                "icon": "special://skin/extras/icons/tv.png",
+                "target": "videos",
+                "widget_style": "Landscape"
+            }
+        ]
+    },
+    {
+        "label": "TMDb Helper",
+        "path": "plugin://plugin.video.themoviedb.helper/?info=dir_movie",
+        "icon": "special://skin/extras/icons/plug.png",
+        "target": "videos",
+        "guid": "guid-tmdbhelper-main",
+        "submenulist_label": "TMDb Helper Movies",
+        "submenulist_path": "plugin://plugin.video.themoviedb.helper/?info=dir_movie",
+        "submenulist_icon": "special://skin/extras/icons/plug.png",
+        "submenulist_target": "videos",
+        "widgets": [
+            {
+                "label": "Popularne",
+                "icon": "special://skin/extras/shapes.png",
+                "path": "plugin://plugin.video.themoviedb.helper/?info=trakt_trending&tmdb_type=movie&widget=true&reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",
+                "target": "videos",
+                "submenu": [],
+                "widgets": [],
+                "guid": "guid-tmdb-movies-popular"
+            },
+            {
+                "label": "Nowości",
+                "path": "plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&widget=true&reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",
+                "icon": "special://skin/extras/icons/new.png",
+                "target": "videos",
+                "guid": "guid-tmdb-movies-new"
+            },
+            {
+                "label": "Popularne seriale",
+                "path": "plugin://plugin.video.themoviedb.helper/?info=trakt_trending&tmdb_type=tv&widget=true&reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",
+                "target": "videos",
+                "guid": "guid-tmdb-tv-popular"
+            }
+        ]
+    }
+]

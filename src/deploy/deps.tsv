@@ -1,0 +1,20 @@
+# Dependencies for skin.netflixlike
+# Format: id <TAB> version <TAB> url <TAB> sha256
+# Sources:
+#   jurialmunkey alpha repository (omega branch, minversion 20.9.1+)
+#   official Kodi add-on mirror (piers)
+# The deploy script skips an add-on if the same version is already installed
+# on the TV. Stale files from older versions are never deleted (per project
+# rules); only overwritten.
+plugin.video.themoviedb.helper	6.20.8	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/plugin.video.themoviedb.helper/plugin.video.themoviedb.helper-6.20.8.zip	dd50ba2a474cf040cb960397bd1973e21750477e6d32158ccb78e24f4bc36d6e
+script.skinvariables	2.2.12	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/script.skinvariables/script.skinvariables-2.2.12.zip	caa15464788667aed0f8dea5942bbe8c6fb93c6df11b46dad02ed42b256304fe
+script.texturemaker	0.2.11	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/script.texturemaker/script.texturemaker-0.2.11.zip	051bca651c467901b12fcae56ca430402427149d801fa7a7cfd1254d386a738b
+script.module.jurialmunkey	0.2.35	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/script.module.jurialmunkey/script.module.jurialmunkey-0.2.35.zip	80302314cdbc5a75611b0c2866eb1c7b4e93ccadaf20208ef7eb79b79c1fb749
+script.module.infotagger	0.1.0	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/script.module.infotagger/script.module.infotagger-0.1.0.zip	82bf72ad2e8184e4a560135d7fa2ea1f37d95a0a7524100554da527f816ca876
+resource.font.robotocjksc	0.0.3	https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/resource.font.robotocjksc/resource.font.robotocjksc-0.0.3.zip	58c3e32cafbbf0984896c4ab317c820e555f3deacae977598e4a03a0f8139743
+resource.images.weathericons.white	0.0.6	https://mirrors.kodi.tv/addons/piers/resource.images.weathericons.white/resource.images.weathericons.white-0.0.6.zip	06832f4817842829e1b64678b4609318035528937e4f5a40352319eefc7b4c6d
+resource.images.studios.coloured	0.0.24	https://mirrors.kodi.tv/addons/piers/resource.images.studios.coloured/resource.images.studios.coloured-0.0.24.zip	12c9f399ecd9114b49f481bf9508c9107fe2542341a0d7a5e017dc3eb24bbb41
+script.module.addon.signals	0.0.6+matrix.1	https://mirrors.kodi.tv/addons/piers/script.module.addon.signals/script.module.addon.signals-0.0.6+matrix.1.zip	a14fdec2d8f5f941a29bab6350a15f9f5c9fab6adfd4f9167f31ed62855f7695
+script.module.qrcode	6.1.0+matrix.3	https://mirrors.kodi.tv/addons/piers/script.module.qrcode/script.module.qrcode-6.1.0+matrix.3.zip	0cdc5b01b02b0aca87fa29b9f0c3972a4e8dabe454ef50f5207f385019dae07a
+# optional: not required by the skin, installed because the project uses it
+script.skinshortcuts	3.0.5	https://mirrors.kodi.tv/addons/piers/script.skinshortcuts/script.skinshortcuts-3.0.5.zip	421caadfe657b8d8f23b523a4c1fc315db78c20de134169bedb546c76e4c2be1

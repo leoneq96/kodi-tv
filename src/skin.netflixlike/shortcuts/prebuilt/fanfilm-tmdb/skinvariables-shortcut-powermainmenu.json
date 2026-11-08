@@ -1,0 +1,30 @@
+[
+    {
+        "label": "FanFilm",
+        "path": "plugin://plugin.video.fanfilm/",
+        "icon": "special://skin/extras/icons/fanfilm.png",
+        "target": "videos",
+        "guid": "guid-fanfilm-powermain"
+    },
+    {
+        "label": "TMDb Helper",
+        "path": "plugin://plugin.video.themoviedb.helper/?info=dir_movie",
+        "icon": "special://skin/extras/icons/plug.png",
+        "target": "videos",
+        "guid": "guid-tmdbhelper-powermain"
+    },
+    {
+        "label": "Ustawienia",
+        "path": "ActivateWindow(1132)",
+        "icon": "special://skin/extras/icons/settings.png",
+        "target": "",
+        "guid": "guid-settings-powermain"
+    },
+    {
+        "label": "Wyjście",
+        "path": "Quit",
+        "icon": "special://skin/extras/icons/power.png",
+        "target": "",
+        "guid": "guid-quit-powermain"
+    }
+]

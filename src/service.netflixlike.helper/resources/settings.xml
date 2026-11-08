@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <category label="Ogólne">
+        <setting id="auto_refresh" type="bool" label="Auto-odświeżanie" default="true" />
+        <setting id="max_continue_items" type="integer" label="Max elementów w Kontynuuj oglądanie" default="20" />
+        <setting id="max_list_items" type="integer" label="Max elementów w Mojej Liście" default="50" />
+    </category>
+    <category label="Widgety">
+        <setting id="widget_mylist_enabled" type="bool" label="Włącz widget: Moja Lista" default="true" />
+        <setting id="widget_continue_enabled" type="bool" label="Włącz widget: Kontynuuj oglądanie" default="true" />
+        <setting id="widget_profiles_enabled" type="bool" label="Włącz widget: Profile" default="true" />
+    </category>
+    <category label="FanFilm">
+        <setting id="fanfilm_enabled" type="bool" label="Używaj FanFilm do historii" default="true" />
+        <setting id="fanfilm_priority" type="integer" label="Priorytet FanFilm vs Kodi" default="1" />
+    </category>
+    <category label="Profile">
+        <setting id="profile_auto_switch" type="bool" label="Automatyczne przełączanie profilu" default="false" />
+    </category>
+</settings>

@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+
+    <include>Action_ButtonMenu_Onload</include>
+
+    <include content="Action_Hubs_Onload" condition="String.IsEmpty(Skin.String(Hub.Home.ReplaceWindow))">
+        <param name="window_id">Home</param>
+        <param name="property_window_id">Home</param>
+        <param name="is_homemenu">Skin.HasSetting(Hub.Home.DisableSubmenu)</param>
+    </include>
+
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1101)">
+        <param name="window_id">1101</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1102)">
+        <param name="window_id">1102</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1103)">
+        <param name="window_id">1103</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1104)">
+        <param name="window_id">1104</param>
+        <param name="property_window_id">Home</param>
+    </include>
+
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1106)">
+        <param name="window_id">1106</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1107)">
+        <param name="window_id">1107</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1108)">
+        <param name="window_id">1108</param>
+        <param name="property_window_id">Home</param>
+    </include>
+    <include content="Action_Hubs_Onload" condition="Integer.IsEqual(Skin.String(Hub.Home.ReplaceWindow),1109)">
+        <param name="window_id">1109</param>
+        <param name="property_window_id">Home</param>
+    </include>
+
+
+    <onload condition="!Skin.HasSetting(Wizard.FirstRun)">AlarmClock(openwizard,ActivateWindow(1180),00:01,silent)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetBool(Hub.Home.DisableSubmenu)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetString(Shortcuts.RebuildDateTime,FirstRun)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetBool(Home.FirstRun)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">AlarmClock(reloadskin,ReloadSkin(),00:00,silent)</onload>
+
+    <onload>$VAR[Action_RatingsMonitor]</onload>
+
+    <controls>
+        <!-- NetflixLike: Hero Banner -->
+        <include>Hero_Banner</include>
+
+        <!-- NetflixLike: Horizontal Rows -->
+        <control type="group">
+            <posx>60</posx>
+            <posy>540</posy>
+            
+            <!-- Row 1: Continue Watching (Kontynuuj oglądanie) -->
+            <control type="group" id="9000">
+                <posx>0</posx>
+                <posy>0</posy>
+                <include>Row_Header</include>
+                <param name="label">Kontynuuj oglądanie</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.fanfilm/?action=continue_watching,return)</param>
+                <control type="list" id="9001">
+                    <posx>0</posx>
+                    <posy>50</posy>
+                    <width>1800</width>
+                    <height>300</height>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <itemlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12</font>
+                            <textcolor>white</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                            <include>Animation_Poster_Focus_Zoom</include>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12_bold</font>
+                            <textcolor>accent</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                        <control type="image">
+                            <posx>-10</posx>
+                            <posy>-10</posy>
+                            <width>240</width>
+                            <height>330</height>
+                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
+                            <colordiffuse>accent</colordiffuse>
+                        </control>
+                    </focusedlayout>
+                    <content>
+                        <item>
+                            <label>Kontynuuj oglądanie</label>
+                            <path>plugin://plugin.video.fanfilm/?action=continue_watching</path>
+                            <icon>special://skin/extras/icons/recentlyadded.png</icon>
+                        </item>
+                    </content>
+                </control>
+            </control>
+
+            <!-- Row 2: Popular (Popularne) -->
+            <control type="group" id="9010">
+                <posx>0</posx>
+                <posy>380</posy>
+                <include>Row_Header</include>
+                <param name="label">Popularne</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                <control type="list" id="9011">
+                    <posx>0</posx>
+                    <posy>50</posy>
+                    <width>1800</width>
+                    <height>300</height>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <itemlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12</font>
+                            <textcolor>white</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                            <include>Animation_Poster_Focus_Zoom</include>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12_bold</font>
+                            <textcolor>accent</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                        <control type="image">
+                            <posx>-10</posx>
+                            <posy>-10</posy>
+                            <width>240</width>
+                            <height>330</height>
+                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
+                            <colordiffuse>accent</colordiffuse>
+                        </control>
+                    </focusedlayout>
+                    <content>
+                        <item>
+                            <label>Popularne</label>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=movie&amp;widget=true</path>
+                            <icon>special://skin/extras/icons/trending.png</icon>
+                        </item>
+                    </content>
+                </control>
+            </control>
+
+            <!-- Row 3: New Releases (Nowości) -->
+            <control type="group" id="9020">
+                <posx>0</posx>
+                <posy>760</posy>
+                <include>Row_Header</include>
+                <param name="label">Nowości</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&amp;widget=true,return)</param>
+                <control type="list" id="9021">
+                    <posx>0</posx>
+                    <posy>50</posy>
+                    <width>1800</width>
+                    <height>300</height>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <itemlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12</font>
+                            <textcolor>white</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                            <include>Animation_Poster_Focus_Zoom</include>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12_bold</font>
+                            <textcolor>accent</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                        <control type="image">
+                            <posx>-10</posx>
+                            <posy>-10</posy>
+                            <width>240</width>
+                            <height>330</height>
+                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
+                            <colordiffuse>accent</colordiffuse>
+                        </control>
+                    </focusedlayout>
+                    <content>
+                        <item>
+                            <label>Nowości</label>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&amp;widget=true</path>
+                            <icon>special://skin/extras/icons/new.png</icon>
+                        </item>
+                    </content>
+                </control>
+            </control>
+
+            <!-- Row 4: Series (Seriale) -->
+            <control type="group" id="9030">
+                <posx>0</posx>
+                <posy>1140</posy>
+                <include>Row_Header</include>
+                <param name="label">Seriale</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=tv&amp;widget=true,return)</param>
+                <control type="list" id="9031">
+                    <posx>0</posx>
+                    <posy>50</posy>
+                    <width>1800</width>
+                    <height>300</height>
+                    <scrolltime>200</scrolltime>
+                    <orientation>horizontal</orientation>
+                    <itemlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12</font>
+                            <textcolor>white</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="240" height="280">
+                        <control type="image">
+                            <width>220</width>
+                            <height>310</height>
+                            <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                            <include>Animation_Poster_Focus_Zoom</include>
+                        </control>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>320</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font12_bold</font>
+                            <textcolor>accent</textcolor>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <maxlines>2</maxlines>
+                        </control>
+                        <control type="image">
+                            <posx>-10</posx>
+                            <posy>-10</posy>
+                            <width>240</width>
+                            <height>330</height>
+                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
+                            <colordiffuse>accent</colordiffuse>
+                        </control>
+                    </focusedlayout>
+                    <content>
+                        <item>
+                            <label>Seriale</label>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=tv&amp;widget=true</path>
+                            <icon>special://skin/extras/icons/tv.png</icon>
+                        </item>
+                    </content>
+                </control>
+            </control>
+        </control>
+        
+        <!-- Side Menu -->
+        <include content="Home_Menu">
+            <param name="onlist">400</param>
+            <param name="window_id">Home</param>
+            <param name="property_window_id">Home</param>
+        </include>
+    </controls>
+</window>

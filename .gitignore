@@ -4,3 +4,6 @@ reference/
 *.key
 id_*
 .env
+
+# deploy.sh download cache
+src/deploy/.cache/

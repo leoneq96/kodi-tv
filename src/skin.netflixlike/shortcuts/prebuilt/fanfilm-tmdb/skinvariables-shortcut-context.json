@@ -1,0 +1,30 @@
+[
+    {
+        "label": "Odtwórz",
+        "path": "Play",
+        "icon": "special://skin/extras/icons/play.png",
+        "target": "",
+        "guid": "guid-play-context"
+    },
+    {
+        "label": "Informacje",
+        "path": "Info",
+        "icon": "special://skin/extras/icons/info.png",
+        "target": "",
+        "guid": "guid-info-context"
+    },
+    {
+        "label": "Dodaj do ulubionych",
+        "path": "RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-openfavourite.json,use_rules)",
+        "icon": "special://skin/extras/icons/heart.png",
+        "target": "",
+        "guid": "guid-favourite-context"
+    },
+    {
+        "label": "Oznacz jako obejrzane",
+        "path": "SetWatchedStatus",
+        "icon": "special://skin/extras/icons/watched-show.png",
+        "target": "",
+        "guid": "guid-watched-context"
+    }
+]

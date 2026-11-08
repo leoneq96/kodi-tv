@@ -1,0 +1,23 @@
+[
+    {
+        "label": "FanFilm - Szukaj",
+        "path": "plugin://plugin.video.fanfilm/?action=search",
+        "icon": "special://skin/extras/icons/search.png",
+        "target": "videos",
+        "guid": "guid-fanfilm-search"
+    },
+    {
+        "label": "TMDb Helper - Szukaj filmy",
+        "path": "plugin://plugin.video.themoviedb.helper/?info=search_movie",
+        "icon": "special://skin/extras/icons/search.png",
+        "target": "videos",
+        "guid": "guid-tmdbhelper-search-movie"
+    },
+    {
+        "label": "TMDb Helper - Szukaj seriale",
+        "path": "plugin://plugin.video.themoviedb.helper/?info=search_tv",
+        "icon": "special://skin/extras/icons/search.png",
+        "target": "videos",
+        "guid": "guid-tmdbhelper-search-tv"
+    }
+]

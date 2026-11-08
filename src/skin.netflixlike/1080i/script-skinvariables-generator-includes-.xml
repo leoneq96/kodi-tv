@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Pre-generated stub with empty items to prevent GetDirectory errors -->
+    <include name="Hub_Menu_Group"></include>
+    <include name="skinvariables-homemenu-customitems"><items></items></include>
+    <include name="skinvariables-homemenu-spotlight"><items></items></include>
+    <include name="skinvariables-homemenu-staticitems"><items></items></include>
+    <include name="skinvariables-homemenu-submenu"><items></items></include>
+    <include name="skinvariables-homemenu-widgets"><items></items></include>
+    <include name="skinvariables-homemenu-widgets-listcheck"><items></items></include>
+    <include name="skinvariables-options-tray-customitems"><items></items></include>
+    <include name="skinvariables-options-tray-onload"></include>
+    <include name="skinvariables-options-tray-spotlight"><items></items></include>
+    <include name="skinvariables-options-tray-staticitems"><items></items></include>
+    <include name="skinvariables-options-tray-submenu"><items></items></include>
+    <include name="skinvariables-options-tray-widgets"><items></items></include>
+    <include name="skinvariables-options-tray-widgets-listcheck"><items></items></include>
+    <include name="skinvariables-powermainmenu-customitems"><items></items></include>
+    <include name="skinvariables-powermainmenu-spotlight"><items></items></include>
+    <include name="skinvariables-powermainmenu-staticitems"><items></items></include>
+    <include name="skinvariables-powermainmenu-submenu"><items></items></include>
+    <include name="skinvariables-powermainmenu-widgets"><items></items></include>
+    <include name="skinvariables-powermainmenu-widgets-listcheck"><items></items></include>
+    <include name="skinvariables-searchmenu-customitems"><items></items></include>
+    <include name="skinvariables-searchmenu-selector"></include>
+    <include name="skinvariables-searchmenu-spotlight"><items></items></include>
+    <include name="skinvariables-searchmenu-staticitems"><items></items></include>
+    <include name="skinvariables-searchmenu-submenu"><items></items></include>
+    <include name="skinvariables-searchmenu-widgets"><items></items></include>
+    <include name="skinvariables-searchmenu-widgets-listcheck"><items></items></include>
+    <include name="skinvariables-sidemenu-customitems"><items></items></include>
+    <include name="skinvariables-sidemenu-spotlight"><items></items></include>
+    <include name="skinvariables-sidemenu-staticitems"><items></items></include>
+    <include name="skinvariables-sidemenu-submenu"><items></items></include>
+    <include name="skinvariables-sidemenu-widgets"><items></items></include>
+    <include name="skinvariables-sidemenu-widgets-listcheck"><items></items></include>
+    <include name="skinvariables-skinusers"></include>
+</includes>
