@@ -68,6 +68,7 @@
                 <include>Row_Header</include>
                 <param name="label">Kontynuuj oglądanie</param>
                 <param name="action">ActivateWindow(Videos,plugin://plugin.video.fanfilm/?action=continue_watching,return)</param>
+                <param name="button_id">9201</param>
                 <control type="list" id="9001">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -75,6 +76,10 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onleft>9201</onleft>
+                    <onright>9201</onright>
+                    <onup>9201</onup>
+                    <ondown>9011</ondown>
                     <itemlayout width="240" height="280">
                         <control type="image">
                             <width>220</width>
@@ -137,6 +142,7 @@
                 <posx>0</posx>
                 <posy>380</posy>
                 <include>Row_Header</include>
+                <param name="button_id">9202</param>
                 <param name="label">Popularne</param>
                 <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=movie&amp;widget=true,return)</param>
                 <control type="list" id="9011">
@@ -146,6 +152,10 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onleft>9202</onleft>
+                    <onright>9202</onright>
+                    <onup>9001</onup>
+                    <ondown>9021</ondown>
                     <itemlayout width="240" height="280">
                         <control type="image">
                             <width>220</width>
@@ -202,12 +212,14 @@
                     </content>
                 </control>
             </control>
+                <param name="button_id">9203</param>
 
             <!-- Row 3: New Releases (Nowości) -->
             <control type="group" id="9020">
                 <posx>0</posx>
                 <posy>760</posy>
                 <include>Row_Header</include>
+                <param name="button_id">9203</param>
                 <param name="label">Nowości</param>
                 <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&amp;widget=true,return)</param>
                 <control type="list" id="9021">
@@ -217,6 +229,10 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onleft>9203</onleft>
+                    <onright>9203</onright>
+                    <onup>9011</onup>
+                    <ondown>9031</ondown>
                     <itemlayout width="240" height="280">
                         <control type="image">
                             <width>220</width>
@@ -278,6 +294,7 @@
             <control type="group" id="9030">
                 <posx>0</posx>
                 <posy>1140</posy>
+                <param name="button_id">9204</param>
                 <include>Row_Header</include>
                 <param name="label">Seriale</param>
                 <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=tv&amp;widget=true,return)</param>
@@ -288,6 +305,10 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onleft>9204</onleft>
+                    <onright>9204</onright>
+                    <onup>9021</onup>
+                    <ondown>400</ondown>
                     <itemlayout width="240" height="280">
                         <control type="image">
                             <width>220</width>
