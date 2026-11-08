@@ -18,27 +18,17 @@ import time
 import traceback
 from threading import Thread
 
-# Lazy imports to avoid import errors at module level
-def import_resources():
-    from resources.lib.router import Router
-    from resources.lib.kodiutils import log, get_kodi_version
-    from resources.lib.database import Database
-    from resources.lib.profiles import ProfileManager
-    from resources.lib.mylist import MyList
-    from resources.lib.continuewatching import ContinueWatching
-    from resources.lib.providers.fanfilm import FanFilmProvider
-    from resources.lib.providers.kodilibrary import KodiLibraryProvider
-    return {
-        'Router': Router,
-        'log': log,
-        'get_kodi_version': get_kodi_version,
-        'Database': Database,
-        'ProfileManager': ProfileManager,
-        'MyList': MyList,
-        'ContinueWatching': ContinueWatching,
-        'FanFilmProvider': FanFilmProvider,
-        'KodiLibraryProvider': KodiLibraryProvider,
-    }
+# Direct imports from same directory (resources/lib/)
+# Kodi adds the addon's resources/lib to sys.path when loading the service
+from router import Router
+from kodiutils import log, get_kodi_version
+from database import Database
+from profiles import ProfileManager
+from mylist import MyList
+from continuewatching import ContinueWatching
+from providers.fanfilm import FanFilmProvider
+from providers.kodilibrary import KodiLibraryProvider
+
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -70,8 +60,7 @@ def initialize_addon():
             xbmcvfs.File(DATA_FILE, 'w').write(json.dumps(default_data, ensure_ascii=False, indent=2))
 
         # Ensure database is initialized
-        resources = import_resources()
-        resources['Database']().init()
+        Database().init()
     except Exception as e:
         xbmc.log(f"[NetflixLike Helper] Error in initialize_addon: {e}", xbmc.LOGERROR)
         xbmc.log(f"[NetflixLike Helper] Traceback: {traceback.format_exc()}", xbmc.LOGERROR)
@@ -84,31 +73,27 @@ class NetflixLikeMonitor(xbmc.Monitor):
         """Constructor for Monitor"""
         super().__init__()
         try:
-            resources = import_resources()
-            self.log_func = resources['log']
-            self.profile_manager = resources['ProfileManager']()
+            # Initialize addon directories first, before creating ProfileManager
+            initialize_addon()
+            self.log_func = log
+            self.profile_manager = ProfileManager()
             self.current_profile = get_active_profile()
             self.log_func(f"NetflixLike Helper started for profile: {self.current_profile}")
-            initialize_addon()
         except Exception as e:
             xbmc.log(f"[NetflixLike Helper] Error in Monitor.__init__: {e}", xbmc.LOGERROR)
             xbmc.log(f"[NetflixLike Helper] Traceback: {traceback.format_exc()}", xbmc.LOGERROR)
 
     def onSettingsChanged(self):
         try:
-            resources = import_resources()
-            log_func = resources['log']
-            log_func("Settings changed, reloading...")
+            log("Settings changed, reloading...")
         except Exception as e:
             xbmc.log(f"[NetflixLike Helper] Error in onSettingsChanged: {e}", xbmc.LOGERROR)
 
     def onProfileChanged(self):
         try:
-            resources = import_resources()
-            log_func = resources['log']
             old_profile = self.current_profile
             self.current_profile = get_active_profile()
-            log_func(f"Profile changed from {old_profile} to {self.current_profile}")
+            log(f"Profile changed from {old_profile} to {self.current_profile}")
             self.profile_manager.load_profile(self.current_profile)
         except Exception as e:
             xbmc.log(f"[NetflixLike Helper] Error in onProfileChanged: {e}", xbmc.LOGERROR)

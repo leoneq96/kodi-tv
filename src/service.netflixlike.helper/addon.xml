@@ -2,12 +2,13 @@
 <addon id="service.netflixlike.helper"
        name="NetflixLike Helper"
        version="1.0.0"
-       provider-name="NetflixLike Project"
-       minversion="20.0.0">
+       provider-name="NetflixLike Project">
     <requires>
-        <import addon="xbmc.python"/>
-        <import addon="xbmc.addon"/>
+        <import addon="xbmc.python" version="3.0.0"/>
     </requires>
+    <extension point="xbmc.python.script" library="resources/lib/script_entry.py">
+        <provides>executable</provides>
+    </extension>
     <extension point="xbmc.service" library="resources/lib/service_entry.py"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">NetflixLike Helper Service</summary>

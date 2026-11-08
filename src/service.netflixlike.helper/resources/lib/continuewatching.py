@@ -6,10 +6,10 @@
 import xbmc
 import json
 import time
-from resources.lib.kodiutils import log
-from resources.lib.database import Database
-from resources.lib.providers.fanfilm import FanFilmProvider
-from resources.lib.providers.kodilibrary import KodiLibraryProvider
+from kodiutils import log
+from database import Database
+from providers.fanfilm import FanFilmProvider
+from providers.kodilibrary import KodiLibraryProvider
 
 
 class ContinueWatching:

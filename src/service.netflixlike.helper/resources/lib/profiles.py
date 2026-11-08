@@ -8,8 +8,8 @@ import xbmcgui
 import xbmcvfs
 import json
 import time
-from resources.lib.kodiutils import log
-from resources.lib.database import Database
+from kodiutils import log
+from database import Database
 
 
 class ProfileManager:

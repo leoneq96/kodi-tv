@@ -6,7 +6,7 @@
 import xbmc
 import json
 import time
-from resources.lib.kodiutils import log
+from kodiutils import log
 
 
 class KodiLibraryProvider:

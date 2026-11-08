@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 import json
 import time
-from resources.lib.kodiutils import log
+from kodiutils import log
 
 
 class FanFilmProvider:
@@ -58,7 +58,7 @@ class FanFilmProvider:
         """Get movie history from FanFilm."""
         return "plugin://plugin.video.fanfilm/history/movie"
 
-    def get_history_tvshows(self):
+    def get_history_tvshows(self, limit=20):
         """Get TV show history from FanFilm."""
         return "plugin://plugin.video.fanfilm/history/show"
 

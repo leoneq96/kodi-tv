@@ -14,14 +14,14 @@ import os
 import time
 from urllib.parse import parse_qs, urlparse
 
-from resources.lib.router import Router
-from resources.lib.kodiutils import log, get_kodi_version
-from resources.lib.database import Database
-from resources.lib.profiles import ProfileManager
-from resources.lib.mylist import MyList
-from resources.lib.continuewatching import ContinueWatching
-from resources.lib.providers.fanfilm import FanFilmProvider
-from resources.lib.providers.kodilibrary import KodiLibraryProvider
+from router import Router
+from kodiutils import log, get_kodi_version
+from database import Database
+from profiles import ProfileManager
+from mylist import MyList
+from continuewatching import ContinueWatching
+from providers.fanfilm import FanFilmProvider
+from providers.kodilibrary import KodiLibraryProvider
 
 
 ADDON = xbmcaddon.Addon()

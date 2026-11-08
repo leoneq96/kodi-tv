@@ -8,7 +8,7 @@ Service entry point for NetflixLike Helper.
 This is called by Kodi's CServiceAddonManager when starting the service.
 """
 
-from resources.lib.monitor import NetflixLikeMonitor
+from monitor import NetflixLikeMonitor
 
 # Start the monitor
 NetflixLikeMonitor().run()
