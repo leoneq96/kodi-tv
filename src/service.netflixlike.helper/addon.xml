@@ -3,12 +3,12 @@
        name="NetflixLike Helper"
        version="1.0.0"
        provider-name="NetflixLike Project"
-       minversion="21.0.0">
+       minversion="20.0.0">
     <requires>
-        <import addon="xbmc.python" version="3.1.0"/>
-        <import addon="xbmc.addon" version="1.0.0"/>
+        <import addon="xbmc.python"/>
+        <import addon="xbmc.addon"/>
     </requires>
-    <extension point="xbmc.service" library="service.py" start="login"/>
+    <extension point="xbmc.service" library="resources/lib/service_entry.py"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">NetflixLike Helper Service</summary>
         <description lang="en">Service addon for NetflixLike skin. Provides My List (custom list with context menu add/remove), Continue Watching (from Kodi library and FanFilm history), and Netflix-style profile selection based on Kodi profiles. Exposes widget sources for NetflixLike skin.</description>
