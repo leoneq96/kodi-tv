@@ -348,14 +348,13 @@ copy_skin() {
     log "Kopiuję $SKIN_ID na TV..."
     
     copy_tree "$SKIN_SRC" "$ADDONS_DIR/$SKIN_ID" "yes"
-    
-    # Ustaw skinvariables.skinuser na "default" w settings.xml skina (w userdata/addon_data)
-    local skin_settings="$KODI_HOME/userdata/addon_data/$SKIN_ID/settings.xml"
-    run_tv "sed -i 's|<setting id=\"skinvariables.skinuser\" type=\"string\"></setting>|<setting id=\"skinvariables.skinuser\" type=\"string\">default</setting>|' "$skin_settings""
-    # Ustaw skinvariables.skinuser na "default" w settings.xml skina (w userdata/addon_data)
-    local skin_settings="$KODI_HOME/userdata/addon_data/$SKIN_ID/settings.xml"
-    run_tv "sed -i 's|<setting id=\"skinvariables.skinuser\" type=\"string\"></setting>|<setting id=\"skinvariables.skinuser\" type=\"string\">default</setting>|' "$skin_settings""
-    
+
+    # UWAGA: nie ustawiamy tu Skin.String(SkinVariables.SkinUser).
+    # script.skinvariables trzyma dla domyslnego uzytkownika ten string PUSTY
+    # (skinusers.py: Skin.Reset(SkinVariables.SkinUser)), a generator nazywa plik
+    # script-skinvariables-generator-includes-{skinuser}.xml. Wpis "default"
+    # powodowal powstanie pliku -default.xml, ktorego Includes.xml nie laduje.
+
     local rid rver
     rid=$(run_tv "cat '$ADDONS_DIR/$SKIN_ID/addon.xml'" 2>/dev/null \
         | sed -n 's/.*<addon[^>]*id=\"\([^\"]*\)\".*/\1/p' | head -n1 || true)

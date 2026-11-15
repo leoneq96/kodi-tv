@@ -147,7 +147,7 @@
                 <include>Row_Header</include>
                 <param name="button_id">9202</param>
                 <param name="label">Popularne</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true,return)</param>
                 <control type="list" id="9011">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -209,7 +209,7 @@
                     <content>
                         <item>
                             <label>Popularne</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=movie&amp;widget=true</path>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true</path>
                             <icon>special://skin/extras/icons/trending.png</icon>
                         </item>
                     </content>
@@ -224,7 +224,7 @@
                 <include>Row_Header</include>
                 <param name="button_id">9203</param>
                 <param name="label">Nowości</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&amp;widget=true,return)</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true,return)</param>
                 <control type="list" id="9021">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -286,7 +286,7 @@
                     <content>
                         <item>
                             <label>Nowości</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=tmdb_new_movies&amp;widget=true</path>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true</path>
                             <icon>special://skin/extras/icons/new.png</icon>
                         </item>
                     </content>
@@ -300,7 +300,7 @@
                 <param name="button_id">9204</param>
                 <include>Row_Header</include>
                 <param name="label">Seriale</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=tv&amp;widget=true,return)</param>
+                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true,return)</param>
                 <control type="list" id="9031">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -362,7 +362,7 @@
                     <content>
                         <item>
                             <label>Seriale</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=trakt_trending&amp;tmdb_type=tv&amp;widget=true</path>
+                            <path>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true</path>
                             <icon>special://skin/extras/icons/tv.png</icon>
                         </item>
                     </content>
