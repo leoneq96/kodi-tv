@@ -769,10 +769,10 @@
                         <textcolor>accent</textcolor>
                     </control>
                 </onfocus>
-                <onleft>9001</onleft>
-                <onright>9001</onright>
-                <onup>9001</onup>
-                <ondown>9001</ondown>
+                <onleft>$PARAM[list_id]</onleft>
+                <onright>$PARAM[list_id]</onright>
+                <onup>$PARAM[list_id]</onup>
+                <ondown>$PARAM[list_id]</ondown>
             </control>
         </control>
     </include>

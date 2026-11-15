@@ -75,10 +75,12 @@
             <control type="group" id="9000">
                 <posx>0</posx>
                 <posy>0</posy>
-                <include>Row_Header</include>
-                <param name="label">Kontynuuj oglądanie</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.fanfilm/?action=continue_watching,return)</param>
-                <param name="button_id">9201</param>
+                <include content="Row_Header">
+                    <param name="label">Kontynuuj oglądanie</param>
+                    <param name="action">ActivateWindow(Videos,plugin://plugin.video.fanfilm/?action=continue_watching,return)</param>
+                    <param name="button_id">9201</param>
+                    <param name="list_id">9001</param>
+                </include>
                 <control type="list" id="9001">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -145,10 +147,12 @@
             <control type="group" id="9010">
                 <posx>0</posx>
                 <posy>260</posy>
-                <include>Row_Header</include>
-                <param name="button_id">9202</param>
-                <param name="label">Popularne</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                <include content="Row_Header">
+                    <param name="button_id">9202</param>
+                    <param name="label">Popularne</param>
+                    <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                    <param name="list_id">9011</param>
+                </include>
                 <control type="list" id="9011">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -216,10 +220,12 @@
             <control type="group" id="9020">
                 <posx>0</posx>
                 <posy>520</posy>
-                <include>Row_Header</include>
-                <param name="button_id">9203</param>
-                <param name="label">Nowości</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                <include content="Row_Header">
+                    <param name="button_id">9203</param>
+                    <param name="label">Nowości</param>
+                    <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true,return)</param>
+                    <param name="list_id">9021</param>
+                </include>
                 <control type="list" id="9021">
                     <posx>0</posx>
                     <posy>50</posy>
@@ -286,10 +292,12 @@
             <control type="group" id="9030">
                 <posx>0</posx>
                 <posy>780</posy>
-                <param name="button_id">9204</param>
-                <include>Row_Header</include>
-                <param name="label">Seriale</param>
-                <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true,return)</param>
+                <include content="Row_Header">
+                    <param name="button_id">9204</param>
+                    <param name="label">Seriale</param>
+                    <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true,return)</param>
+                    <param name="list_id">9031</param>
+                </include>
                 <control type="list" id="9031">
                     <posx>0</posx>
                     <posy>50</posy>
