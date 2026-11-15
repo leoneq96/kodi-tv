@@ -616,6 +616,32 @@
     </include>
 
     <!-- NetflixLike: Hero Banner at top of home screen -->
+    <!-- NetflixLike: Hero czyta dane z AKTUALNIE FOKUSOWANEGO rzędu.
+         ListItem.* na poziomie okna to pozycja fokusowanego kontrolki
+         (przy fokusie w menu 300 = pozycja menu, a nie filmu), dlatego
+         laczymy sie wprost z kontenerami rzadow. -->
+    <variable name="Hero_Fanart">
+        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Art(fanart)]</value>
+        <value>$INFO[Container(9011).ListItem.Art(fanart)]</value>
+    </variable>
+    <variable name="Hero_Title">
+        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Title]</value>
+        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Title]</value>
+        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Title]</value>
+        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Title]</value>
+        <value>$INFO[Container(9011).ListItem.Title]</value>
+    </variable>
+    <variable name="Hero_Plot">
+        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Plot]</value>
+        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Plot]</value>
+        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Plot]</value>
+        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Plot]</value>
+        <value>$INFO[Container(9011).ListItem.Plot]</value>
+    </variable>
+
     <include name="Hero_Banner">
         <control type="group">
             <posx>0</posx>
@@ -628,7 +654,7 @@
             <control type="image">
                 <width>1920</width>
                 <height>520</height>
-                <texture fallback="special://skin/extras/backgrounds/hero_default.jpg">$INFO[ListItem.Fanart]</texture>
+                <texture fallback="special://skin/extras/backgrounds/hero_default.jpg">$VAR[Hero_Fanart]</texture>
                 <aspectratio>scale</aspectratio>
                 <animation effect="fade" time="0" condition="!Skin.HasSetting(ENABLE_EFFECTS)">Conditional</animation>
                 <animation effect="fade" time="500" condition="Skin.HasSetting(ENABLE_EFFECTS)">Conditional</animation>
@@ -656,7 +682,7 @@
                     <font>font40_bold</font>
                     <textcolor>white</textcolor>
                     <shadowcolor>black</shadowcolor>
-                    <label>$INFO[ListItem.Title]</label>
+                    <label>$VAR[Hero_Title]</label>
                     <scroll>true</scroll>
                 </control>
                 
@@ -667,7 +693,7 @@
                     <height>180</height>
                     <font>font16</font>
                     <textcolor>grey2</textcolor>
-                    <label>$INFO[ListItem.Plot]</label>
+                    <label>$VAR[Hero_Plot]</label>
                     <autoscroll time="5000" delay="3000" repeat="5000">Skin.HasSetting(ENABLE_EFFECTS)</autoscroll>
                 </control>
                 
