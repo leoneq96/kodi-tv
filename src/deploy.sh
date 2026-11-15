@@ -18,7 +18,7 @@
 #   TV=tv                       # alias SSH (domyślnie: tv)
 #   TV_IP=192.168.18.68         # adres do JSON-RPC (domyślnie z ssh -G)
 #   KODI_HOME=...               # katalog .kodi na TV
-#   BACKUP_ROOT=...             # katalog backupów na TV
+#   BACKUP_ROOT=...             # katalog backupów NA TELEFONIE (lokalny, nie na TV)
 #   NO_DEPS=1 / NO_RESTART=1 / ACTIVATE=1 / FORCE_DEPS=1
 #
 set -euo pipefail
@@ -35,7 +35,8 @@ TV="${TV:-tv}"
 APP_DIR="/media/developer/apps/usr/palm/applications/org.xbmc.kodi"
 KODI_HOME="${KODI_HOME:-$APP_DIR/.kodi}"
 ADDONS_DIR="$KODI_HOME/addons"
-BACKUP_ROOT="${BACKUP_ROOT:-/media/developer/backups/kodi}"
+# Backupy trzymamy w pamięci TELEFONU - TV ma za mało miejsca (1.9 GB dysk).
+BACKUP_ROOT="${BACKUP_ROOT:-$HOME/kodi-backups}"
 REMOTE_BIN_RSYNC="/media/developer/apps/usr/palm/services/org.webosbrew.hbchannel.service/bin/rsync"
 
 NO_DEPS="${NO_DEPS:-0}"
@@ -264,48 +265,64 @@ check_space() {
         deps_kb=$((deps_kb + $(staged_kb "${plan_id[$i]}" "${plan_ver[$i]}")))
     done
     free_kb=$(run_tv "df -k '$KODI_HOME'" | awk 'NR==2{print $4}')
-    # 150 MiB marginesu na backup (kompresja) i inne pliki Kodi
-    need_kb=$((skin_kb + deps_kb + 150000))
+    # 50 MiB marginesu (backupow juz nie ma na TV - trzymamy je na telefonie)
+    need_kb=$((skin_kb + deps_kb + 50000))
     log "Miejsce na TV: wolne $((free_kb/1024)) MiB, potrzeba ok. $((need_kb/1024)) MiB."
     [[ "$free_kb" -ge "$need_kb" ]] \
         || die "za mało miejsca na TV (wolne $((free_kb/1024)) MiB, potrzeba $((need_kb/1024)) MiB)"
 }
 
 # ---------------------------------------------------------------------------
-# backup
+# backup - kopia stanu TV trzymana na TELEFONIE (pobieranie przez SSH)
 # ---------------------------------------------------------------------------
+# Nic nie jest zapisywane na TV: katalog backupu powstaje lokalnie,
+# a pliki sa sciagnane z TV przez ssh (strumien tar/cat do pliku lokalnego).
+pull_tv_tar() {   # base_dir name_in_base out_file
+    local base="$1" name="$2" out="$3"
+    run_tv "tar -czf - -C '$base' '$name'" > "$out"
+}
+
+pull_tv_file() {  # remote_path out_file
+    local src="$1" out="$2"
+    run_tv "cat '$src'" > "$out"
+}
+
 do_backup() {
-    local ts="$1" bdir="$BACKUP_ROOT/$ts" i id
-    log "Backup na TV: $bdir"
-    run_tv "mkdir -p '$bdir'"
+    local ts="$1" bdir="$BACKUP_ROOT/$ts" i id f
+    log "Backup na telefonie: $bdir"
+    mkdir -p "$bdir"
 
     if remote_has_dir "$ADDONS_DIR/$SKIN_ID"; then
-        run_tv "tar -czf '$bdir/$SKIN_ID.tar.gz' -C '$ADDONS_DIR' '$SKIN_ID'"
+        pull_tv_tar "$ADDONS_DIR" "$SKIN_ID" "$bdir/$SKIN_ID.tar.gz"
         log "  $SKIN_ID.tar.gz"
     fi
 
     if remote_has_dir "$KODI_HOME/userdata/addon_data/$SKIN_ID"; then
-        run_tv "tar -czf '$bdir/addon_data-$SKIN_ID.tar.gz' -C '$KODI_HOME/userdata/addon_data' '$SKIN_ID'"
+        pull_tv_tar "$KODI_HOME/userdata/addon_data" "$SKIN_ID" "$bdir/addon_data-$SKIN_ID.tar.gz"
         log "  addon_data-$SKIN_ID.tar.gz"
     fi
 
     if remote_has_file "$KODI_HOME/userdata/guisettings.xml"; then
-        run_tv "cp -p '$KODI_HOME/userdata/guisettings.xml' '$bdir/guisettings.xml'"
+        pull_tv_file "$KODI_HOME/userdata/guisettings.xml" "$bdir/guisettings.xml"
         log "  guisettings.xml"
     fi
 
-    # baza add-onów Kodi (mała, przydatna przy odtwarzaniu)
-    run_tv "cp -p '$KODI_HOME'/userdata/Database/Addons*.db '$bdir/' 2>/dev/null || true"
+    # baza add-onow Kodi (mala, przydatna przy odtwarzaniu)
+    while IFS= read -r f; do
+        [[ -n "$f" ]] || continue
+        pull_tv_file "$f" "$bdir/$(basename "$f")"
+        log "  $(basename "$f")"
+    done < <(run_tv "ls -1 '$KODI_HOME'/userdata/Database/Addons*.db 2>/dev/null" || true)
 
-    # katalogi danych add-onów, które będą nadpisane
+    # katalogi danych add-onow, ktore beda nadpisane
     for ((i=0; i<${#plan_id[@]}; i++)); do
         id="${plan_id[$i]}"
         if remote_has_dir "$ADDONS_DIR/$id"; then
-            run_tv "tar -czf '$bdir/$id.tar.gz' -C '$ADDONS_DIR' '$id'"
+            pull_tv_tar "$ADDONS_DIR" "$id" "$bdir/$id.tar.gz"
             log "  $id.tar.gz"
         fi
         if remote_has_dir "$KODI_HOME/userdata/addon_data/$id"; then
-            run_tv "tar -czf '$bdir/addon_data-$id.tar.gz' -C '$KODI_HOME/userdata/addon_data' '$id'"
+            pull_tv_tar "$KODI_HOME/userdata/addon_data" "$id" "$bdir/addon_data-$id.tar.gz"
             log "  addon_data-$id.tar.gz"
         fi
     done
@@ -315,11 +332,13 @@ do_backup() {
 skin=$SKIN_ID
 skin_version=$SKIN_VERSION
 kodi_home=$KODI_HOME
+backup_target=$TV
+backup_location=local_phone
 "
     for ((i=0; i<${#plan_id[@]}; i++)); do
         manifest+="dep=${plan_id[$i]} ${plan_ver[$i]}"$'\n'
     done
-    printf '%s' "$manifest" | run_tv "cat > '$bdir/manifest.txt'"
+    printf '%s' "$manifest" > "$bdir/manifest.txt"
     log "  manifest.txt"
     BACKUP_DIR="$bdir"
 }
@@ -689,7 +708,7 @@ main() {
     if [[ "$DRY_RUN" == "1" ]]; then
         log ""
         log "DRY-RUN: nic nie zapisano na TV."
-        log "  backup:     $BACKUP_ROOT/<timestamp>/"
+        log "  backup:     $BACKUP_ROOT/<timestamp>/  (lokalnie, na telefonie)"
         log "  skin:       $ADDONS_DIR/$SKIN_ID"
         log "  zależności: ${#plan_id[@]}"
         log "  restart:    $([[ "$NO_RESTART" == "1" ]] && echo nie || echo tak)"
