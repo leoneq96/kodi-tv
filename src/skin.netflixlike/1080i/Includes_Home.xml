@@ -625,11 +625,12 @@
          (przy fokusie w menu 300 = pozycja menu, a nie filmu), dlatego
          laczymy sie wprost z kontenerami rzadow. -->
     <variable name="Hero_Fanart">
-        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Art(fanart)]</value>
-        <value>$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9001) &amp;&amp; !String.IsEmpty(Container(9001).ListItem.Art(fanart))">$INFO[Container(9001).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9011) &amp;&amp; !String.IsEmpty(Container(9011).ListItem.Art(fanart))">$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9021) &amp;&amp; !String.IsEmpty(Container(9021).ListItem.Art(fanart))">$INFO[Container(9021).ListItem.Art(fanart)]</value>
+        <value condition="Control.HasFocus(9031) &amp;&amp; !String.IsEmpty(Container(9031).ListItem.Art(fanart))">$INFO[Container(9031).ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(Container(9011).ListItem.Art(fanart))">$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value>special://skin/extras/backgrounds/hero/hero_default.jpg</value>
     </variable>
     <variable name="Hero_Title">
         <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Title]</value>
@@ -658,7 +659,7 @@
             <control type="image">
                 <width>1920</width>
                 <height>420</height>
-                <texture fallback="special://skin/extras/backgrounds/hero_default.jpg">$VAR[Hero_Fanart]</texture>
+                <texture fallback="special://skin/extras/backgrounds/hero/hero_default.jpg">$VAR[Hero_Fanart]</texture>
                 <aspectratio>scale</aspectratio>
                 <animation effect="fade" time="0" condition="!Skin.HasSetting(ENABLE_EFFECTS)">Conditional</animation>
                 <animation effect="fade" time="500" condition="Skin.HasSetting(ENABLE_EFFECTS)">Conditional</animation>
