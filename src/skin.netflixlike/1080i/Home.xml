@@ -53,6 +53,10 @@
     <!-- NetflixLike: Trigger SkinVariables generator on Home load -->
     <onload>RunScript(script.skinvariables, run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json, use_rules)</onload>
 
+    <!-- NetflixLike: AF2 ustawia tu 100601 (kontrolka, ktorej u nas nie ma);
+         menu 300 wraca w prawo do tego wlasnie id (lista Popularne) -->
+    <onload>SetProperty(TMDbHelper.WidgetContainer,9011,Home)</onload>
+
     <onload>$VAR[Action_RatingsMonitor]</onload>
 
     <controls>
@@ -79,7 +83,7 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
-                    <onleft>9201</onleft>
+                    <onleft>300</onleft>
                     <onright>9201</onright>
                     <onup>9201</onup>
                     <ondown>9011</ondown>
@@ -149,7 +153,7 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
-                    <onleft>9202</onleft>
+                    <onleft>300</onleft>
                     <onright>9202</onright>
                     <onup>9001</onup>
                     <ondown>9021</ondown>
@@ -220,7 +224,7 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
-                    <onleft>9203</onleft>
+                    <onleft>300</onleft>
                     <onright>9203</onright>
                     <onup>9011</onup>
                     <ondown>9031</ondown>
@@ -290,7 +294,7 @@
                     <height>300</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
-                    <onleft>9204</onleft>
+                    <onleft>300</onleft>
                     <onright>9204</onright>
                     <onup>9021</onup>
                     <ondown>9001</ondown>
