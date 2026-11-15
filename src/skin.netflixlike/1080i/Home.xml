@@ -66,7 +66,10 @@
         <!-- NetflixLike: Horizontal Rows -->
         <control type="group">
             <posx>60</posx>
-            <posy>540</posy>
+            <posy>440</posy>
+            <!-- NetflixLike: fokus na rzędzie 3/4 -> cala grupa leci w gore, bez animacji -->
+            <animation effect="slide" start="0,0" end="0,-260" time="0" condition="Control.HasFocus(9021)">Conditional</animation>
+            <animation effect="slide" start="0,0" end="0,-520" time="0" condition="Control.HasFocus(9031)">Conditional</animation>
             
             <!-- Row 1: Continue Watching (Kontynuuj oglądanie) -->
             <control type="group" id="9000">
@@ -80,56 +83,56 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>300</height>
+                    <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onleft>300</onleft>
                     <onright>9201</onright>
                     <onup>9201</onup>
                     <ondown>9011</ondown>
-                    <itemlayout width="240" height="280">
+                    <itemlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="240" height="280">
+                    <focusedlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                             <include>Animation_Poster_Focus_Zoom</include>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                         <control type="image">
-                            <posx>-10</posx>
-                            <posy>-10</posy>
-                            <width>240</width>
-                            <height>330</height>
+                            <posx>-5</posx>
+                            <posy>-5</posy>
+                            <width>145</width>
+                            <height>205</height>
                             <texture>special://skin/extras/textures/selectbox_thin.png</texture>
                             <colordiffuse>accent</colordiffuse>
                         </control>
@@ -141,7 +144,7 @@
             <!-- Row 2: Popular (Popularne) -->
             <control type="group" id="9010">
                 <posx>0</posx>
-                <posy>380</posy>
+                <posy>260</posy>
                 <include>Row_Header</include>
                 <param name="button_id">9202</param>
                 <param name="label">Popularne</param>
@@ -150,56 +153,56 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>300</height>
+                    <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onleft>300</onleft>
                     <onright>9202</onright>
                     <onup>9001</onup>
                     <ondown>9021</ondown>
-                    <itemlayout width="240" height="280">
+                    <itemlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="240" height="280">
+                    <focusedlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                             <include>Animation_Poster_Focus_Zoom</include>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                         <control type="image">
-                            <posx>-10</posx>
-                            <posy>-10</posy>
-                            <width>240</width>
-                            <height>330</height>
+                            <posx>-5</posx>
+                            <posy>-5</posy>
+                            <width>145</width>
+                            <height>205</height>
                             <texture>special://skin/extras/textures/selectbox_thin.png</texture>
                             <colordiffuse>accent</colordiffuse>
                         </control>
@@ -212,7 +215,7 @@
             <!-- Row 3: New Releases (Nowości) -->
             <control type="group" id="9020">
                 <posx>0</posx>
-                <posy>760</posy>
+                <posy>520</posy>
                 <include>Row_Header</include>
                 <param name="button_id">9203</param>
                 <param name="label">Nowości</param>
@@ -221,56 +224,56 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>300</height>
+                    <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onleft>300</onleft>
                     <onright>9203</onright>
                     <onup>9011</onup>
                     <ondown>9031</ondown>
-                    <itemlayout width="240" height="280">
+                    <itemlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="240" height="280">
+                    <focusedlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                             <include>Animation_Poster_Focus_Zoom</include>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                         <control type="image">
-                            <posx>-10</posx>
-                            <posy>-10</posy>
-                            <width>240</width>
-                            <height>330</height>
+                            <posx>-5</posx>
+                            <posy>-5</posy>
+                            <width>145</width>
+                            <height>205</height>
                             <texture>special://skin/extras/textures/selectbox_thin.png</texture>
                             <colordiffuse>accent</colordiffuse>
                         </control>
@@ -282,7 +285,7 @@
             <!-- Row 4: Series (Seriale) -->
             <control type="group" id="9030">
                 <posx>0</posx>
-                <posy>1140</posy>
+                <posy>780</posy>
                 <param name="button_id">9204</param>
                 <include>Row_Header</include>
                 <param name="label">Seriale</param>
@@ -291,56 +294,56 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>300</height>
+                    <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onleft>300</onleft>
                     <onright>9204</onright>
                     <onup>9021</onup>
                     <ondown>9001</ondown>
-                    <itemlayout width="240" height="280">
+                    <itemlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="240" height="280">
+                    <focusedlayout width="145" height="205">
                         <control type="image">
-                            <width>220</width>
-                            <height>310</height>
+                            <width>135</width>
+                            <height>180</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
                             <aspectratio>keep</aspectratio>
                             <include>Animation_Poster_Focus_Zoom</include>
                         </control>
                         <control type="label">
                             <posx>0</posx>
-                            <posy>320</posy>
-                            <width>220</width>
-                            <height>30</height>
+                            <posy>182</posy>
+                            <width>135</width>
+                            <height>22</height>
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <maxlines>2</maxlines>
+                            <maxlines>1</maxlines>
                         </control>
                         <control type="image">
-                            <posx>-10</posx>
-                            <posy>-10</posy>
-                            <width>240</width>
-                            <height>330</height>
+                            <posx>-5</posx>
+                            <posy>-5</posy>
+                            <width>145</width>
+                            <height>205</height>
                             <texture>special://skin/extras/textures/selectbox_thin.png</texture>
                             <colordiffuse>accent</colordiffuse>
                         </control>

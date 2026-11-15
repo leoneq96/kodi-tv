@@ -606,6 +606,10 @@
 
     <include name="Home_Menu">
         <control type="group">
+            <!-- NetflixLike: AF2 przesuwa panel menu w lewo (Hub_Menu_Slide) przy
+                 fokusie na menu. Bez tego panel zostaje na x=-480 (poza ekranem).
+                 U nas przesuw jest natychmiastowy (time=0). -->
+            <animation effect="slide" start="-480" end="0" time="0" condition="$EXP[Exp_HomeMenu_HasFocus]">Conditional</animation>
             <include>Animation_Group_Bumper_Right</include>
             <include content="Home_Menu_Vert">
                 <param name="onlist">$PARAM[onlist]</param>
@@ -647,13 +651,13 @@
             <posx>0</posx>
             <posy>0</posy>
             <width>1920</width>
-            <height>520</height>
+            <height>420</height>
             <visible>!Skin.HasSetting(ENABLE_HERO_DISABLE)</visible>
             
             <!-- Background Fanart -->
             <control type="image">
                 <width>1920</width>
-                <height>520</height>
+                <height>420</height>
                 <texture fallback="special://skin/extras/backgrounds/hero_default.jpg">$VAR[Hero_Fanart]</texture>
                 <aspectratio>scale</aspectratio>
                 <animation effect="fade" time="0" condition="!Skin.HasSetting(ENABLE_EFFECTS)">Conditional</animation>
@@ -663,7 +667,7 @@
             <!-- Dark Gradient Overlay -->
             <control type="image">
                 <width>1920</width>
-                <height>520</height>
+                <height>420</height>
                 <texture>special://skin/extras/textures/gradient_vertical.png</texture>
                 <colordiffuse>hero_overlay</colordiffuse>
             </control>
@@ -673,7 +677,7 @@
                 <posx>120</posx>
                 <posy>80</posy>
                 <width>800</width>
-                <height>400</height>
+                <height>340</height>
                 
                 <!-- Title -->
                 <control type="label" id="9100">
