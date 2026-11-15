@@ -21,7 +21,17 @@ ADDON = xbmcaddon.Addon()
 ADDON_PATH = ADDON.getAddonInfo('path')
 sys.path.insert(0, os.path.join(ADDON_PATH, 'resources', 'lib'))
 
-from resources.lib.service_entry import main
+try:
+    from default import run_plugin
+except Exception as e:
+    xbmc.log(f"[NetflixLike Helper] Error importing default: {e}", xbmc.LOGERROR)
+    xbmc.log(f"[NetflixLike Helper] Traceback: {traceback.format_exc()}", xbmc.LOGERROR)
+    raise
 
 if __name__ == '__main__':
-    main()
+    try:
+        run_plugin()
+    except Exception as e:
+        xbmc.log(f"[NetflixLike Helper] Fatal error in script_entry: {e}", xbmc.LOGFATAL)
+        xbmc.log(f"[NetflixLike Helper] Traceback: {traceback.format_exc()}", xbmc.LOGFATAL)
+        raise

@@ -49,6 +49,9 @@
     <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetString(Shortcuts.RebuildDateTime,FirstRun)</onload>
     <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetBool(Home.FirstRun)</onload>
     <onload condition="!Skin.HasSetting(Home.FirstRun)">AlarmClock(reloadskin,ReloadSkin(),00:00,silent)</onload>
+    
+    <!-- NetflixLike: Trigger SkinVariables generator on Home load -->
+    <onload>RunScript(script.skinvariables, run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json, use_rules)</onload>
 
     <onload>$VAR[Action_RatingsMonitor]</onload>
 
@@ -127,10 +130,10 @@
                             <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
-                    <content>
+                    <content target="widget">
                         <item>
                             <label>Kontynuuj oglądanie</label>
-                            <path>plugin://plugin.video.fanfilm/?action=continue_watching</path>
+                            <path>plugin://service.netflixlike.helper/widget/continue</path>
                             <icon>special://skin/extras/icons/recentlyadded.png</icon>
                         </item>
                     </content>

@@ -28,5 +28,7 @@
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
+        <setting id="SkinUserLogin.Disabled" type="bool" label="31504" default="true" />
+        <setting id="SkinUserLogin.StartupLoginScreen" type="bool" label="31506" default="false" />
     </extension>
 </addon>

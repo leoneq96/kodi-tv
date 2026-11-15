@@ -8,7 +8,19 @@ Service entry point for NetflixLike Helper.
 This is called by Kodi's CServiceAddonManager when starting the service.
 """
 
-from monitor import NetflixLikeMonitor
+import xbmc
+import traceback
 
-# Start the monitor
-NetflixLikeMonitor().run()
+try:
+    from monitor import NetflixLikeMonitor
+
+    xbmc.log("[NetflixLike Helper] service_entry: Creating monitor instance", xbmc.LOGINFO)
+    monitor = NetflixLikeMonitor()
+    xbmc.log("[NetflixLike Helper] service_entry: Starting monitor.run()", xbmc.LOGINFO)
+    
+    # Start the monitor
+    monitor.run()
+    xbmc.log("[NetflixLike Helper] service_entry: monitor.run() returned", xbmc.LOGINFO)
+except Exception as e:
+    xbmc.log(f"[NetflixLike Helper] Fatal error in service_entry: {e}", xbmc.LOGFATAL)
+    xbmc.log(f"[NetflixLike Helper] Traceback: {traceback.format_exc()}", xbmc.LOGFATAL)

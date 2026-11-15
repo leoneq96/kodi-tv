@@ -103,12 +103,39 @@ class NetflixLikeMonitor(xbmc.Monitor):
 
     def run(self):
         """Main service loop"""
-        self.log_func('Service started', 0)
+        try:
+            self.log_func('Service started', 0)
+            xbmc.log("[NetflixLike Helper] monitor.run: Service started logged", xbmc.LOGINFO)
+        except Exception as e:
+            xbmc.log(f"[NetflixLike Helper] monitor.run: Error logging 'Service started': {e}", xbmc.LOGERROR)
+            xbmc.log(f"[NetflixLike Helper] monitor.run: Traceback: {traceback.format_exc()}", xbmc.LOGERROR)
 
+        loop_count = 0
         while not self.abortRequested():
+            loop_count += 1
+            try:
+                xbmc.log(f"[NetflixLike Helper] monitor.run: Loop iteration {loop_count}, abortRequested={self.abortRequested()}", xbmc.LOGDEBUG)
+            except Exception as e:
+                xbmc.log(f"[NetflixLike Helper] monitor.run: Error logging loop: {e}", xbmc.LOGERROR)
+            
             # check every 10 sec
-            if self.waitForAbort(10):
+            try:
+                abort = self.waitForAbort(10)
+                xbmc.log(f"[NetflixLike Helper] monitor.run: waitForAbort returned {abort}, abortRequested={self.abortRequested()}", xbmc.LOGDEBUG)
+            except Exception as e:
+                xbmc.log(f"[NetflixLike Helper] monitor.run: Exception in waitForAbort: {e}", xbmc.LOGERROR)
+                xbmc.log(f"[NetflixLike Helper] monitor.run: Traceback: {traceback.format_exc()}", xbmc.LOGERROR)
+                break
+            
+            if abort:
                 # Abort was requested while waiting. We should exit
+                try:
+                    self.log_func('Abort requested, exiting', 0)
+                except Exception as e:
+                    xbmc.log(f"[NetflixLike Helper] monitor.run: Error logging 'Abort requested': {e}", xbmc.LOGERROR)
                 break
 
-        self.log_func('Service stopped', 0)
+        try:
+            self.log_func('Service stopped', 0)
+        except Exception as e:
+            xbmc.log(f"[NetflixLike Helper] monitor.run: Error logging 'Service stopped': {e}", xbmc.LOGERROR)

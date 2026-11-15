@@ -4,6 +4,7 @@
 # License: GPL v3.0
 
 import re
+import xbmc
 from functools import wraps
 
 

@@ -245,7 +245,7 @@
 
             <!-- Default Controls Home -->
             <include content="Object_DefaultControl" condition="[$PARAM[is_homemenu]] + !Skin.HasSetting(SideMenu.FocusWidgetsFirst)">
-                <param name="defaultcontrol">300</param>
+                <param name="defaultcontrol">400</param>
                 <param name="always">false</param>
             </include>
             <include content="Object_DefaultControl" condition="[$PARAM[is_homemenu]] + Skin.HasSetting(SideMenu.FocusWidgetsFirst)">
@@ -259,7 +259,7 @@
                 <param name="always">false</param>
             </include>
             <include content="Object_DefaultControl" condition="![$PARAM[is_homemenu]] + !Skin.HasSetting(Hub.$PARAM[window_id].DisableSubmenu) + Skin.HasSetting(Hub.$PARAM[window_id].DisableSpotlight)">
-                <param name="defaultcontrol">300</param>
+                <param name="defaultcontrol">400</param>
                 <param name="always">false</param>
             </include>
             <include content="Object_DefaultControl" condition="![$PARAM[is_homemenu]] + !Skin.HasSetting(Hub.$PARAM[window_id].DisableSubmenu) + !Skin.HasSetting(Hub.$PARAM[window_id].DisableSpotlight)">

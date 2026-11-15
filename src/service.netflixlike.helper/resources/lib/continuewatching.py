@@ -31,7 +31,7 @@ class ContinueWatching:
             yield self._format_item(item, 'kodi')
 
         # Get from FanFilm history
-        fanfilm_items = self._get_fanfilm_continue_watching()
+        fanfilm_items = self._get_fanfilm_continue_watching(limit)
         for item in fanfilm_items:
             yield self._format_item(item, 'fanfilm')
 
@@ -84,11 +84,118 @@ class ContinueWatching:
             import xbmc
             xbmc.log(f"[NetflixLike] Error getting Kodi continue watching: {e}", xbmc.LOGERROR)
 
-    def _get_fanfilm_continue_watching(self):
+    def _get_fanfilm_continue_watching(self, limit=None):
         """Get continue watching from FanFilm history."""
-        # Use FanFilm's history endpoint
-        # This would call FanFilm's /history/movie and /history/show endpoints
-        pass
+        # Fetch from FanFilm's history endpoints
+        # /history/movie and /history/show
+        
+        # Get movie history
+        movie_history = self._fetch_fanfilm_directory("plugin://plugin.video.fanfilm/history/movie")
+        for item in movie_history[:limit] if limit else movie_history:
+            # Skip placeholder items
+            if item.get('label', '').startswith('Brak treści'):
+                continue
+            yield self._parse_fanfilm_history_item(item, 'movie')
+        
+        # Get TV show history
+        tvshow_history = self._fetch_fanfilm_directory("plugin://plugin.video.fanfilm/history/show")
+        for item in tvshow_history[:limit] if limit else tvshow_history:
+            # Skip placeholder items
+            if item.get('label', '').startswith('Brak treści'):
+                continue
+            yield self._parse_fanfilm_history_item(item, 'episode')
+
+    def _fetch_fanfilm_directory(self, path):
+        """Fetch directory contents from FanFilm plugin via JSON-RPC."""
+        import xbmc
+        try:
+            # Use Files.GetDirectory to get plugin contents (without properties that FanFilm might not support)
+            rpc_call = {
+                "jsonrpc": "2.0",
+                "method": "Files.GetDirectory",
+                "params": {
+                    "directory": path,
+                    "media": "video"
+                },
+                "id": 1
+            }
+            result = xbmc.executeJSONRPC(json.dumps(rpc_call))
+            result = json.loads(result)
+            
+            if 'result' in result and 'files' in result['result']:
+                return result['result']['files']
+        except Exception as e:
+            xbmc.log(f"[NetflixLike Helper] Error fetching FanFilm directory {path}: {e}", xbmc.LOGERROR)
+        return []
+
+    def _parse_fanfilm_history_item(self, item, default_type):
+        """Parse FanFilm history item to standard format."""
+        # Determine type from item properties
+        mediatype = item.get('type', default_type)
+        
+        # Get file path (plugin URL)
+        file_path = item.get('file', '')
+        
+        # Extract TMDB ID from file path
+        # Format: plugin://plugin.video.fanfilm/play/movie/{tmdb_id}
+        tmdb_id = 0
+        if '/play/movie/' in file_path:
+            try:
+                tmdb_id = int(file_path.split('/play/movie/')[1].split('/')[0])
+            except (ValueError, IndexError):
+                pass
+        elif '/play/show/' in file_path:
+            try:
+                parts = file_path.split('/play/show/')[1].split('/')
+                tmdb_id = int(parts[0]) if parts else 0
+            except (ValueError, IndexError):
+                pass
+        
+        # Get unique IDs (tmdb, imdb, etc.) - not available from basic history
+        uniqueid = {}
+        if tmdb_id:
+            uniqueid['tmdb'] = tmdb_id
+        
+        # Get resume info - not available from basic history
+        # Use mock values or try to get from item
+        resume = item.get('resume', {})
+        position = resume.get('position', 0)
+        total = resume.get('total', 0)
+        
+        # If no resume info, create mock progress (50%)
+        if position == 0 and total == 0:
+            position = 1
+            total = 2
+        
+        if mediatype == 'movie':
+            return {
+                'type': 'movie',
+                'title': item.get('label', ''),
+                'year': item.get('year', 0),
+                'plot': item.get('plot', ''),
+                'art': item.get('art', {}),
+                'resume': {'position': position, 'total': total},
+                'lastplayed': item.get('lastplayed', ''),
+                'dbid': tmdb_id,
+                'type': 'movie',
+                'tmdb_id': tmdb_id
+            }
+        else:  # episode
+            return {
+                'type': 'episode',
+                'title': item.get('label', ''),
+                'showtitle': item.get('showtitle', ''),
+                'season': item.get('season', 0),
+                'episode': item.get('episode', 0),
+                'plot': item.get('plot', ''),
+                'art': item.get('art', {}),
+                'resume': {'position': position, 'total': total},
+                'lastplayed': item.get('lastplayed', ''),
+                'dbid': item.get('episodeid', 0),
+                'type': 'episode',
+                'tmdb_id': uniqueid.get('tmdb', 0),
+                'tvshow_tmdb_id': item.get('tvshowid', 0)
+            }
 
     def get_items_list(self, limit=None):
         """Get items as list."""
@@ -102,7 +209,10 @@ class ContinueWatching:
             items.append(self._format_item(item, 'kodi'))
 
         # Get from FanFilm
-        # TODO: implement FanFilm history fetching
+        for item in self._get_fanfilm_continue_watching(limit):
+            if len(items) >= (limit or 100):
+                break
+            items.append(self._format_item(item, 'fanfilm'))
 
         return items
 
@@ -112,12 +222,15 @@ class ContinueWatching:
             label = item['title']
             if item.get('year'):
                 label += f" ({item['year']})"
-            path = f"plugin://plugin.video.fanfilm/play/movie/{item.get('dbid', 0)}"
+            # Use TMDb ID for FanFilm, dbid for Kodi
+            play_id = item.get('tmdb_id', item.get('dbid', 0))
+            path = f"plugin://plugin.video.fanfilm/play/movie/{play_id}"
             icon = item.get('art', {}).get('poster', 'DefaultMovie.png')
             fanart = item.get('art', {}).get('fanart', '')
         else:  # episode
             label = f"{item.get('showtitle', '')} S{item['season']:02d}E{item['episode']:02d}"
-            path = f"plugin://plugin.video.fanfilm/play/show/0/{item.get('season', 1)}/{item.get('episode', 1)}"
+            play_id = item.get('tmdb_id', item.get('dbid', 0))
+            path = f"plugin://plugin.video.fanfilm/play/show/{play_id}/{item.get('season', 1)}/{item.get('episode', 1)}"
             icon = item.get('art', {}).get('thumb', item.get('art', {}).get('poster', 'DefaultEpisode.png'))
             fanart = item.get('art', {}).get('fanart', '')
 
@@ -133,7 +246,7 @@ class ContinueWatching:
 
         return {
             'label': item.get('label', item.get('title', '')),
-            'path': f"plugin://plugin.video.fanfilm/play/movie/{item.get('dbid', 0)}" if item['type'] == 'movie' else f"plugin://plugin.video.fanfilm/play/show/0/{item.get('season',1)}/{item.get('episode',1)}",
+            'path': path,
             'icon': item.get('art', {}).get('poster', item.get('art', {}).get('thumb', 'DefaultVideo.png')),
             'art': {
                 'icon': item.get('art', {}).get('poster', 'DefaultVideo.png'),

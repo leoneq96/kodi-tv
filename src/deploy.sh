@@ -556,16 +556,61 @@ configure_tmdbhelper_fanfilm() {
     local out
     log "Konfiguruję TMDb Helper do używania FanFilm jako odtwarzacza..."
     
-    # 1. Skopiuj plik player JSON do TMDb Helper
-    local player_src="$ADDONS_DIR/$SKIN_ID/extras/players/fanfilm.json"
-    local player_dst="$ADDONS_DIR/plugin.video.themoviedb.helper/resources/players/fanfilm.json"
+    # 1. Skopiuj plik player JSON do TMDb Helper (w addon dir)
+    log "Kopiuję fanfilm.json do TMDb Helper (addon dir)..."
+    run_tv "mkdir -p \"$ADDONS_DIR/plugin.video.themoviedb.helper/resources/players\" && cp -f \"$ADDONS_DIR/$SKIN_ID/extras/players/fanfilm.json\" \"$ADDONS_DIR/plugin.video.themoviedb.helper/resources/players/fanfilm.json\""
+    run_tv "chmod 644 \"$ADDONS_DIR/plugin.video.themoviedb.helper/resources/players/fanfilm.json\""
+    log "  fanfilm.json skopiowany do addon dir"
     
-    log "Kopiuję fanfilm.json do TMDb Helper..."
-    run_tv "mkdir -p '$(dirname \"$player_dst\")' && cp -f \"$player_src\" \"$player_dst\""
-    run_tv "chmod 644 \"$player_dst\""
-    log "  fanfilm.json skopiowany"
+    # 2. Skopiuj plik player JSON do userdata/addon_data (TMDb Helper szuka tam)
+    log "Kopiuję fanfilm.json do userdata/addon_data..."
+    run_tv "mkdir -p \"$KODI_HOME/userdata/addon_data/plugin.video.themoviedb.helper/players\" && cp -f \"$ADDONS_DIR/$SKIN_ID/extras/players/fanfilm.json\" \"$KODI_HOME/userdata/addon_data/plugin.video.themoviedb.helper/players/fanfilm.json\""
+    run_tv "chmod 644 \"$KODI_HOME/userdata/addon_data/plugin.video.themoviedb.helper/players/fanfilm.json\""
+    log "  fanfilm.json skopiowany do userdata/addon_data"
     
-    # 2. Ustaw FanFilm jako domyślny player dla filmów
+    # 3. Utwórz katalog reconfigured_players (wymagany przez TMDb Helper)
+    log "Tworzę katalog reconfigured_players..."
+    run_tv "mkdir -p \"$KODI_HOME/userdata/addon_data/plugin.video.themoviedb.helper/reconfigured_players\" && chmod 755 \"$KODI_HOME/userdata/addon_data/plugin.video.themoviedb.helper/reconfigured_players\""
+    log "  reconfigured_players utworzony"
+    
+    # 4. Włącz addon TMDb Helper (jeśli wyłączony)
+    log "Włączam TMDb Helper..."
+    out=$(rpc Addons.SetAddonEnabled "{\"addonid\":\"plugin.video.themoviedb.helper\",\"enabled\":true}" 2>/dev/null || true)
+    if [[ "$out" != *'"result"'* ]]; then
+        warn "Nie udało się włączyć TMDb Helper: $out"
+    else
+        log "  TMDb Helper włączony"
+    fi
+    
+    # 5. Włącz addon FanFilm (jeśli wyłączony)
+    log "Włączam FanFilm..."
+    out=$(rpc Addons.SetAddonEnabled "{\"addonid\":\"plugin.video.fanfilm\",\"enabled\":true}" 2>/dev/null || true)
+    if [[ "$out" != *'"result"'* ]]; then
+        warn "Nie udało się włączyć FanFilm: $out"
+    else
+        log "  FanFilm włączony"
+    fi
+    
+    # 6. Ustaw ustawienia TMDb Helper przez JSON-RPC Settings.SetSettingValue
+    log "Konfiguruję ustawienia TMDb Helper..."
+    
+    # Ustaw default_player_provider = true (używaj zewnętrznego providera)
+    out=$(rpc Settings.SetSettingValue "{\"setting\":\"plugin.video.themoviedb.helper.default_player_provider\",\"value\":true}" 2>/dev/null || true)
+    if [[ "$out" == *'"result":true'* ]]; then
+        log "  default_player_provider = true"
+    else
+        warn "Nie udało się ustawić default_player_provider: $out"
+    fi
+    
+    # Ustaw default_player_kodi = false (nie używaj wbudowanego Kodi player)
+    out=$(rpc Settings.SetSettingValue "{\"setting\":\"plugin.video.themoviedb.helper.default_player_kodi\",\"value\":false}" 2>/dev/null || true)
+    if [[ "$out" == *'"result":true'* ]]; then
+        log "  default_player_kodi = false"
+    else
+        warn "Nie udało się ustawić default_player_kodi: $out"
+    fi
+    
+    # 7. Ustaw FanFilm jako domyślny player dla filmów przez ExecuteAddon
     log "Ustawiam FanFilm jako domyślny player dla filmów..."
     out=$(rpc Addons.ExecuteAddon \
         "{\"addonid\":\"plugin.video.themoviedb.helper\",\"params\":[\"set_defaultplayer=movie\"]}" \
@@ -576,7 +621,7 @@ configure_tmdbhelper_fanfilm() {
         log "  Domyślny player filmów ustawiony"
     fi
     
-    # 3. Ustaw FanFilm jako domyślny player dla seriali
+    # 8. Ustaw FanFilm jako domyślny player dla seriali
     log "Ustawiam FanFilm jako domyślny player dla seriali..."
     out=$(rpc Addons.ExecuteAddon \
         "{\"addonid\":\"plugin.video.themoviedb.helper\",\"params\":[\"set_defaultplayer=tv\"]}" \
@@ -586,17 +631,6 @@ configure_tmdbhelper_fanfilm() {
     else
         log "  Domyślny player seriali ustawiony"
     fi
-    
-    # 4. Wymuś używanie providera zamiast Kodi player (pomijane - ustawiane ręcznie)
-    # log "Włączam używanie zewnętrznego providera..."
-    # out=$(rpc Settings.SetSettingValue \
-    #     "{\"setting\":\"plugin.video.themoviedb.helper.default_player_provider\",\"value\":true}" \
-    #     2>/dev/null || true)
-    # if [[ "$out" != *'"result":true'* ]]; then
-    #     warn "Nie udało się włączyć providera: $out"
-    # else
-    #     log "  Provider włączony"
-    # fi
     
     log "Konfiguracja TMDb Helper zakończona."
 }
