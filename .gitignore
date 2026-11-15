@@ -7,3 +7,8 @@ id_*
 
 # deploy.sh download cache
 src/deploy/.cache/
+
+# Project documentation (sensitive, local only)
+AGENTS.md
+NOTES.md
+STATE.md
