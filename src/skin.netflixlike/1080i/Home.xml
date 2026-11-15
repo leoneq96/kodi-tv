@@ -130,13 +130,7 @@
                             <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
-                    <content target="widget">
-                        <item>
-                            <label>Kontynuuj oglądanie</label>
-                            <path>plugin://service.netflixlike.helper/widget/continue</path>
-                            <icon>special://skin/extras/icons/recentlyadded.png</icon>
-                        </item>
-                    </content>
+                    <content target="widget">plugin://service.netflixlike.helper/widget/continue</content>
                 </control>
             </control>
 
@@ -206,13 +200,7 @@
                             <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
-                    <content>
-                        <item>
-                            <label>Popularne</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true</path>
-                            <icon>special://skin/extras/icons/trending.png</icon>
-                        </item>
-                    </content>
+                    <content>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true</content>
                 </control>
             </control>
                 <param name="button_id">9203</param>
@@ -283,13 +271,7 @@
                             <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
-                    <content>
-                        <item>
-                            <label>Nowości</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true</path>
-                            <icon>special://skin/extras/icons/new.png</icon>
-                        </item>
-                    </content>
+                    <content>plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true</content>
                 </control>
             </control>
 
@@ -359,13 +341,7 @@
                             <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
-                    <content>
-                        <item>
-                            <label>Seriale</label>
-                            <path>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true</path>
-                            <icon>special://skin/extras/icons/tv.png</icon>
-                        </item>
-                    </content>
+                    <content>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true</content>
                 </control>
             </control>
         </control>
