@@ -293,7 +293,7 @@
                     <onleft>9204</onleft>
                     <onright>9204</onright>
                     <onup>9021</onup>
-                    <ondown>400</ondown>
+                    <ondown>9001</ondown>
                     <itemlayout width="240" height="280">
                         <control type="image">
                             <width>220</width>
@@ -348,7 +348,7 @@
         
         <!-- Side Menu -->
         <include content="Home_Menu">
-            <param name="onlist">400</param>
+            <param name="onlist">9011</param>
             <param name="window_id">Home</param>
             <param name="property_window_id">Home</param>
         </include>
