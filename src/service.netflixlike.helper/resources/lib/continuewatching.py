@@ -36,13 +36,28 @@ def _clean_label(text):
     return ' '.join(text.split())
 
 
+# Hero pokazuje opis w 3 liniach (800 px, font_mini_plot ~26 px)
+# -> ok. 60 znakow na linie, 180 na calosc.
+PLOT_MAX_CHARS = 180
+
+
+def _truncate_plot(text, limit=PLOT_MAX_CHARS):
+    """Skraca opis do 3 linii, po calym slowie, z '...' na koncu."""
+    if len(text) <= limit:
+        return text
+    cut = text[:limit]
+    if ' ' in cut:
+        cut = cut.rsplit(' ', 1)[0]
+    return cut.rstrip(' ,.;:!?—–') + '...'
+
+
 def _clean_plot(text):
-    """Czysty opis: bez tagow i bez paska "llll... 100%" od FanFilmu."""
+    """Czysty opis: bez tagow, bez paska "llll... 100%" i max 3 linie."""
     if not text:
         return ''
     text = _LABEL_TAG_RE.sub('', text)
     text = _LABEL_PROGRESS_RE.sub('', text)
-    return ' '.join(text.split())
+    return _truncate_plot(' '.join(text.split()))
 
 
 def _clean_art_url(value):
