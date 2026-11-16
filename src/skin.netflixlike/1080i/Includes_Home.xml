@@ -625,10 +625,10 @@
          (przy fokusie w menu 300 = pozycja menu, a nie filmu), dlatego
          laczymy sie wprost z kontenerami rzadow. -->
     <variable name="Hero_Fanart">
-        <value condition="Control.HasFocus(9001) &amp;&amp; !String.IsEmpty(Container(9001).ListItem.Art(fanart))">$INFO[Container(9001).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9011) &amp;&amp; !String.IsEmpty(Container(9011).ListItem.Art(fanart))">$INFO[Container(9011).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9021) &amp;&amp; !String.IsEmpty(Container(9021).ListItem.Art(fanart))">$INFO[Container(9021).ListItem.Art(fanart)]</value>
-        <value condition="Control.HasFocus(9031) &amp;&amp; !String.IsEmpty(Container(9031).ListItem.Art(fanart))">$INFO[Container(9031).ListItem.Art(fanart)]</value>
+        <value condition="[Control.HasFocus(9001) + !String.IsEmpty(Container(9001).ListItem.Art(fanart))]">$INFO[Container(9001).ListItem.Art(fanart)]</value>
+        <value condition="[Control.HasFocus(9011) + !String.IsEmpty(Container(9011).ListItem.Art(fanart))]">$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value condition="[Control.HasFocus(9021) + !String.IsEmpty(Container(9021).ListItem.Art(fanart))]">$INFO[Container(9021).ListItem.Art(fanart)]</value>
+        <value condition="[Control.HasFocus(9031) + !String.IsEmpty(Container(9031).ListItem.Art(fanart))]">$INFO[Container(9031).ListItem.Art(fanart)]</value>
         <value condition="!String.IsEmpty(Container(9011).ListItem.Art(fanart))">$INFO[Container(9011).ListItem.Art(fanart)]</value>
         <value>special://skin/extras/backgrounds/hero/hero_default.jpg</value>
     </variable>
