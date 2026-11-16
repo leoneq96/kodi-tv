@@ -5,12 +5,30 @@
 
 import xbmc
 import json
+import re
 import time
 from urllib.parse import unquote
 from kodiutils import log
 from database import Database
 from providers.fanfilm import FanFilmProvider
 from providers.kodilibrary import KodiLibraryProvider
+
+# FanFilm dokleja do etykiet znaczniki formatowania i date obejrzenia,
+# np. "Stra\u017cnicy Galaktyki vol. 2 [COLOR gray][2026-10-30][/COLOR]".
+_LABEL_TAG_RE = re.compile(
+    r'\[/?(?:COLOR|FONT)(?:[=\s][^\]]*)?\]'
+    r'|\[/?(?:B|I|UPPERCASE|LOWERCASE|CAPITALIZE|LIGHT|CR)\]',
+    re.IGNORECASE)
+_LABEL_DATE_RE = re.compile(r'\s*\[\s*\d{4}[-.]\d{2}[-.]\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?\s*\]')
+
+
+def _clean_label(text):
+    """Czysty tytul: bez [COLOR]/[I]/[B] i bez daty w nawiasach."""
+    if not text:
+        return ''
+    text = _LABEL_TAG_RE.sub('', text)
+    text = _LABEL_DATE_RE.sub('', text)
+    return ' '.join(text.split())
 
 
 def _clean_art_url(value):
@@ -247,7 +265,7 @@ class ContinueWatching:
         if mediatype == 'movie':
             return {
                 'type': 'movie',
-                'title': item.get('title') or item.get('label', ''),
+                'title': _clean_label(item.get('title') or item.get('label', '')),
                 'year': item.get('year', 0),
                 'plot': item.get('plot', ''),
                 'art': item.get('art', {}),
@@ -263,7 +281,7 @@ class ContinueWatching:
         else:  # episode
             return {
                 'type': 'episode',
-                'title': item.get('title') or item.get('label', ''),
+                'title': _clean_label(item.get('title') or item.get('label', '')),
                 'showtitle': item.get('showtitle', ''),
                 'season': item.get('season', 0),
                 'episode': item.get('episode', 0),
@@ -328,7 +346,7 @@ class ContinueWatching:
                 progress = int((position / total) * 100)
                 total_time = total
 
-        label_for_display = item.get('label', item.get('title', ''))
+        label_for_display = _clean_label(item.get('label') or item.get('title') or '')
 
         return {
             'label': label_for_display,

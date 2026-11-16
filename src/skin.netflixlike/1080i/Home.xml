@@ -115,7 +115,7 @@
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
@@ -135,7 +135,7 @@
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                         <control type="image">
@@ -188,7 +188,7 @@
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
@@ -208,7 +208,7 @@
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                         <control type="image">
@@ -262,7 +262,7 @@
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
@@ -282,7 +282,7 @@
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                         <control type="image">
@@ -335,7 +335,7 @@
                             <font>font12</font>
                             <textcolor>white</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                     </itemlayout>
@@ -355,7 +355,7 @@
                             <font>font12_bold</font>
                             <textcolor>accent</textcolor>
                             <align>center</align>
-                            <label>$INFO[ListItem.Label]</label>
+                            <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
                         </control>
                         <control type="image">
