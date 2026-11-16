@@ -620,31 +620,39 @@
     </include>
 
     <!-- NetflixLike: Hero Banner at top of home screen -->
-    <!-- NetflixLike: Hero czyta dane z AKTUALNIE FOKUSOWANEGO rzędu.
-         ListItem.* na poziomie okna to pozycja fokusowanego kontrolki
-         (przy fokusie w menu 300 = pozycja menu, a nie filmu), dlatego
-         laczymy sie wprost z kontenerami rzadow. -->
+    <!-- NetflixLike: Hero czeka na Window(Home).Property(Hero.RowId) ustawiana
+         przy fokusie listy (onfocus w Home.xml). Dzieki temu hero nie zmienia
+         sie, gdy fokus wchodzi na przyciski Odtworz/Info, a przyciski graja
+         dokladnie ten sam rzad, ktory widac w hero. -->
     <variable name="Hero_Fanart">
-        <value condition="[Control.HasFocus(9001) + !String.IsEmpty(Container(9001).ListItem.Art(fanart))]">$INFO[Container(9001).ListItem.Art(fanart)]</value>
-        <value condition="[Control.HasFocus(9011) + !String.IsEmpty(Container(9011).ListItem.Art(fanart))]">$INFO[Container(9011).ListItem.Art(fanart)]</value>
-        <value condition="[Control.HasFocus(9021) + !String.IsEmpty(Container(9021).ListItem.Art(fanart))]">$INFO[Container(9021).ListItem.Art(fanart)]</value>
-        <value condition="[Control.HasFocus(9031) + !String.IsEmpty(Container(9031).ListItem.Art(fanart))]">$INFO[Container(9031).ListItem.Art(fanart)]</value>
+        <value condition="[String.IsEqual(Window(Home).Property(Hero.RowId),9001) + !String.IsEmpty(Container(9001).ListItem.Art(fanart))]">$INFO[Container(9001).ListItem.Art(fanart)]</value>
+        <value condition="[String.IsEqual(Window(Home).Property(Hero.RowId),9011) + !String.IsEmpty(Container(9011).ListItem.Art(fanart))]">$INFO[Container(9011).ListItem.Art(fanart)]</value>
+        <value condition="[String.IsEqual(Window(Home).Property(Hero.RowId),9021) + !String.IsEmpty(Container(9021).ListItem.Art(fanart))]">$INFO[Container(9021).ListItem.Art(fanart)]</value>
+        <value condition="[String.IsEqual(Window(Home).Property(Hero.RowId),9031) + !String.IsEmpty(Container(9031).ListItem.Art(fanart))]">$INFO[Container(9031).ListItem.Art(fanart)]</value>
         <value condition="!String.IsEmpty(Container(9011).ListItem.Art(fanart))">$INFO[Container(9011).ListItem.Art(fanart)]</value>
         <value>special://skin/extras/backgrounds/hero/hero_default.jpg</value>
     </variable>
     <variable name="Hero_Title">
-        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Title]</value>
-        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Title]</value>
-        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Title]</value>
-        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Title]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9001)">$INFO[Container(9001).ListItem.Title]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9011)">$INFO[Container(9011).ListItem.Title]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9021)">$INFO[Container(9021).ListItem.Title]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9031)">$INFO[Container(9031).ListItem.Title]</value>
         <value>$INFO[Container(9011).ListItem.Title]</value>
     </variable>
     <variable name="Hero_Plot">
-        <value condition="Control.HasFocus(9001)">$INFO[Container(9001).ListItem.Plot]</value>
-        <value condition="Control.HasFocus(9011)">$INFO[Container(9011).ListItem.Plot]</value>
-        <value condition="Control.HasFocus(9021)">$INFO[Container(9021).ListItem.Plot]</value>
-        <value condition="Control.HasFocus(9031)">$INFO[Container(9031).ListItem.Plot]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9001)">$INFO[Container(9001).ListItem.Plot]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9011)">$INFO[Container(9011).ListItem.Plot]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9021)">$INFO[Container(9021).ListItem.Plot]</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9031)">$INFO[Container(9031).ListItem.Plot]</value>
         <value>$INFO[Container(9011).ListItem.Plot]</value>
+    </variable>
+
+    <!-- NetflixLike: cel dla przyciskow hero - zawsze lista rzedu widocznego w hero -->
+    <variable name="Action_Hero_FocusRow">
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9001)">SetFocus(9001)</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9021)">SetFocus(9021)</value>
+        <value condition="String.IsEqual(Window(Home).Property(Hero.RowId),9031)">SetFocus(9031)</value>
+        <value>SetFocus(9011)</value>
     </variable>
 
     <include name="Hero_Banner">
@@ -684,52 +692,56 @@
                 <control type="label" id="9100">
                     <width>800</width>
                     <height>80</height>
-                    <font>font40_bold</font>
+                    <font>font_head_bold</font>
                     <textcolor>white</textcolor>
                     <shadowcolor>black</shadowcolor>
                     <label>$VAR[Hero_Title]</label>
                     <scroll>true</scroll>
                 </control>
                 
-                <!-- Plot/Description -->
+                <!-- Plot/Description: max 3 linie (font_mini_plot ~26px x1.31 = ~34px/linia) -->
                 <control type="textbox" id="9101">
                     <posy>90</posy>
                     <width>800</width>
-                    <height>180</height>
-                    <font>font16</font>
-                    <textcolor>grey2</textcolor>
+                    <height>110</height>
+                    <font>font_mini_plot</font>
+                    <textcolor>dialog_fg_70</textcolor>
                     <label>$VAR[Hero_Plot]</label>
-                    <autoscroll time="5000" delay="3000" repeat="5000">Skin.HasSetting(ENABLE_EFFECTS)</autoscroll>
                 </control>
                 
-                <!-- Buttons: Play / Info -->
-                <control type="grouplist" id="9102">
-                    <posy>280</posy>
-                    <orientation>horizontal</orientation>
-                    <itemgap>20</itemgap>
-                    <itemlayout width="200" height="60">
-                        <control type="button">
-                            <width>200</width>
-                            <height>60</height>
-                            <font>font18_bold</font>
-                            <textcolor>white</textcolor>
-                            <texturefocus>special://skin/extras/textures/button_focus.png</texturefocus>
-                            <texturenofocus>special://skin/extras/textures/button_nf.png</texturenofocus>
-                            <label>-</label>
-                        </control>
-                    </itemlayout>
-                    <focusedlayout width="200" height="60">
-                        <control type="button">
-                            <width>200</width>
-                            <height>60</height>
-                            <font>font18_bold</font>
-                            <textcolor>black</textcolor>
-                            <texturefocus>special://skin/extras/textures/button_focus.png</texturefocus>
-                            <texturenofocus>special://skin/extras/textures/button_focus.png</texturenofocus>
-                            <label>-</label>
-                            <include>Animation_Poster_Focus_Zoom</include>
-                        </control>
-                    </focusedlayout>
+                <!-- Buttons: Odtworz / Info -->
+                <control type="button" id="9103">
+                    <posy>200</posy>
+                    <width>200</width>
+                    <height>56</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>white</textcolor>
+                    <texturefocus colordiffuse="main_fg_100">special://skin/extras/textures/selectbox_thin.png</texturefocus>
+                    <texturenofocus></texturenofocus>
+                    <label>Odtwórz</label>
+                    <onclick>$VAR[Action_Hero_FocusRow]</onclick>
+                    <onclick>Select</onclick>
+                    <onleft>9104</onleft>
+                    <onright>9104</onright>
+                    <onup>9103</onup>
+                    <ondown>9001</ondown>
+                </control>
+                <control type="button" id="9104">
+                    <posx>220</posx>
+                    <posy>200</posy>
+                    <width>150</width>
+                    <height>56</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>white</textcolor>
+                    <texturefocus colordiffuse="main_fg_100">special://skin/extras/textures/selectbox_thin.png</texturefocus>
+                    <texturenofocus></texturenofocus>
+                    <label>Info</label>
+                    <onclick>$VAR[Action_Hero_FocusRow]</onclick>
+                    <onclick>Info</onclick>
+                    <onleft>9103</onleft>
+                    <onright>9103</onright>
+                    <onup>9104</onup>
+                    <ondown>9001</ondown>
                 </control>
             </control>
         </control>
@@ -768,7 +780,7 @@
                 <visible>!IsEmpty($PARAM[action])</visible>
                 <onleft>$PARAM[list_id]</onleft>
                 <onright>$PARAM[list_id]</onright>
-                <onup>$PARAM[list_id]</onup>
+                <onup>9103</onup>
                 <ondown>$PARAM[list_id]</ondown>
             </control>
         </control>

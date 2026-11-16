@@ -57,6 +57,10 @@
          menu 300 wraca w prawo do tego wlasnie id (lista Popularne) -->
     <onload>SetProperty(TMDbHelper.WidgetContainer,9011,Home)</onload>
 
+    <!-- NetflixLike: ktory rzad karmi hero (fanart/tytul/opis) i przyciski Odtworz/Info.
+         Ustawiane przy fokusie listy, zeby hero nie znikalo, gdy fokus wejdzie na przyciski. -->
+    <onload>SetProperty(Hero.RowId,9011,Home)</onload>
+
     <onload>$VAR[Action_RatingsMonitor]</onload>
 
     <controls>
@@ -88,6 +92,7 @@
                     <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onfocus>SetProperty(Hero.RowId,9001,Home)</onfocus>
                     <onleft>300</onleft>
                     <onright>9201</onright>
                     <onup>9201</onup>
@@ -160,6 +165,7 @@
                     <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onfocus>SetProperty(Hero.RowId,9011,Home)</onfocus>
                     <onleft>300</onleft>
                     <onright>9202</onright>
                     <onup>9001</onup>
@@ -233,6 +239,7 @@
                     <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onfocus>SetProperty(Hero.RowId,9021,Home)</onfocus>
                     <onleft>300</onleft>
                     <onright>9203</onright>
                     <onup>9011</onup>
@@ -305,6 +312,7 @@
                     <height>200</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
+                    <onfocus>SetProperty(Hero.RowId,9031,Home)</onfocus>
                     <onleft>300</onleft>
                     <onright>9204</onright>
                     <onup>9021</onup>
