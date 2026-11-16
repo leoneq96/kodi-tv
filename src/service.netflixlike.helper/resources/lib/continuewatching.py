@@ -6,10 +6,68 @@
 import xbmc
 import json
 import time
+from urllib.parse import unquote
 from kodiutils import log
 from database import Database
 from providers.fanfilm import FanFilmProvider
 from providers.kodilibrary import KodiLibraryProvider
+
+
+def _clean_art_url(value):
+    """Kodi podaje art jako image://https%3a%2f%2f... - wyciagamy czysty URL."""
+    if not value:
+        return ''
+    if value.startswith('image://'):
+        inner = value[len('image://'):]
+        if inner.endswith('/'):
+            inner = inner[:-1]
+        inner = unquote(inner)
+        return inner if inner.startswith('http') else value
+    return value
+
+
+def _tmdb_api_key():
+    """Klucz TMDb z zainstalowanego TMDb Helpera (nie trzymamy go w repo)."""
+    try:
+        import importlib.util
+        import xbmcvfs
+        path = xbmcvfs.translatePath(
+            'special://home/addons/plugin.video.themoviedb.helper/'
+            'resources/tmdbhelper/lib/api/api_keys/tmdb.py')
+        spec = importlib.util.spec_from_file_location('nl_tmdb_keys', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return getattr(module, 'API_KEY', '') or ''
+    except Exception:
+        return ''
+
+
+def tmdb_art(tmdb_id, tmdb_type='movie'):
+    """Poster i fanart z TMDb po tmdb_id - tylko gdy FanFilm nie zwrocil art."""
+    if not tmdb_id:
+        return '', ''
+    api_key = _tmdb_api_key()
+    if not api_key:
+        xbmc.log('[NetflixLike Helper] Brak klucza TMDb - pomijam art dla tmdb_id=%s' % tmdb_id,
+                 xbmc.LOGWARNING)
+        return '', ''
+    try:
+        import urllib.request
+        kind = 'tv' if tmdb_type in ('tv', 'episode', 'show') else 'movie'
+        url = 'https://api.themoviedb.org/3/%s/%s?api_key=%s&language=pl-PL' % (kind, tmdb_id, api_key)
+        with urllib.request.urlopen(url, timeout=10) as response:
+            data = json.loads(response.read().decode('utf-8'))
+        poster = ''
+        fanart = ''
+        if data.get('poster_path'):
+            poster = 'https://image.tmdb.org/t/p/w780%s' % data['poster_path']
+        if data.get('backdrop_path'):
+            fanart = 'https://image.tmdb.org/t/p/w1280%s' % data['backdrop_path']
+        return poster, fanart
+    except Exception as e:
+        xbmc.log('[NetflixLike Helper] TMDb art error (tmdb_id=%s): %s' % (tmdb_id, e),
+                 xbmc.LOGWARNING)
+        return '', ''
 
 
 class ContinueWatching:
@@ -23,8 +81,6 @@ class ContinueWatching:
 
     def get_items(self, limit=None):
         """Get Continue Watching items from Kodi library and FanFilm."""
-        items = []
-
         # Get from Kodi library (local database)
         kodi_items = self._get_kodi_continue_watching()
         for item in kodi_items:
@@ -33,7 +89,11 @@ class ContinueWatching:
         # Get from FanFilm history
         fanfilm_items = self._get_fanfilm_continue_watching(limit)
         for item in fanfilm_items:
-            yield self._format_item(item, 'fanfilm')
+            formatted = self._format_item(item, 'fanfilm')
+            # Bez plakatu nie ma czego pokazac w rzedzie "Kontynuuj ogladanie"
+            if not formatted['art'].get('poster'):
+                continue
+            yield formatted
 
     def _get_kodi_continue_watching(self):
         """Get continue watching from Kodi video database."""
@@ -42,7 +102,7 @@ class ContinueWatching:
 
         try:
             import json
-            result = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"properties":["playcount","lastplayed","resume","art","showtitle","season","episode"],"sort":{"order":"descending","method":"lastplayed"},"limits":{"end":20}},"id":1}')
+            result = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"VideoLibrary.GetEpisodes","params":{"properties":["playcount","lastplayed","resume","art","showtitle","season","episode","title","plot"],"sort":{"order":"descending","method":"lastplayed"},"limits":{"end":20}},"id":1}')
             import json
             result = json.loads(result)
             if 'result' in result and 'episodes' in result['result']:
@@ -51,7 +111,7 @@ class ContinueWatching:
                     if resume.get('position', 0) > 0:
                         yield {
                             'type': 'episode',
-                            'title': ep.get('label', ''),
+                            'title': ep.get('title', ''),
                             'showtitle': ep.get('showtitle', ''),
                             'season': ep.get('season', 0),
                             'episode': ep.get('episode', 0),
@@ -63,7 +123,7 @@ class ContinueWatching:
                             'type': 'episode'
                         }
 
-            result = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"VideoLibrary.GetMovies","params":{"properties":["playcount","lastplayed","resume","art"],"sort":{"order":"descending","method":"lastplayed"},"limits":{"end":20}},"id":1}')
+            result = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"VideoLibrary.GetMovies","params":{"properties":["playcount","lastplayed","resume","art","title","plot","year"],"sort":{"order":"descending","method":"lastplayed"},"limits":{"end":20}},"id":1}')
             result = json.loads(result)
             if 'result' in result and 'movies' in result['result']:
                 for movie in result['result']['movies']:
@@ -71,7 +131,7 @@ class ContinueWatching:
                     if resume.get('position', 0) > 0:
                         yield {
                             'type': 'movie',
-                            'title': movie.get('label', ''),
+                            'title': movie.get('title', ''),
                             'year': movie.get('year', 0),
                             'plot': movie.get('plot', ''),
                             'art': movie.get('art', {}),
@@ -105,17 +165,28 @@ class ContinueWatching:
                 continue
             yield self._parse_fanfilm_history_item(item, 'episode')
 
+    # Pola, ktore FanFilm realnie zwraca (sprawdzone przez Files.GetDirectory):
+    #  art: {clearlogo, fanart, landscape, poster, thumb} - obrazy TMDb,
+    #  uniqueid: {ffid, ffref, imdb, tmdb, tmdb_id},
+    #  year, plot, lastplayed, resume.
+    # Bez "properties" Kodi zwraca tylko label/file/type - dlatego wczesniej
+    # kafelki mialy DefaultVideo.png.
+    FANFILM_PROPERTIES = [
+        "art", "thumbnail", "uniqueid", "year", "plot", "lastplayed", "resume",
+        "title", "season", "episode", "showtitle", "tvshowid", "playcount",
+    ]
+
     def _fetch_fanfilm_directory(self, path):
         """Fetch directory contents from FanFilm plugin via JSON-RPC."""
         import xbmc
         try:
-            # Use Files.GetDirectory to get plugin contents (without properties that FanFilm might not support)
             rpc_call = {
                 "jsonrpc": "2.0",
                 "method": "Files.GetDirectory",
                 "params": {
                     "directory": path,
-                    "media": "video"
+                    "media": "video",
+                    "properties": self.FANFILM_PROPERTIES,
                 },
                 "id": 1
             }
@@ -136,24 +207,30 @@ class ContinueWatching:
         # Get file path (plugin URL)
         file_path = item.get('file', '')
         
-        # Extract TMDB ID from file path
-        # Format: plugin://plugin.video.fanfilm/play/movie/{tmdb_id}
+        # Extract TMDB ID: najpierw z uniqueid (FanFilm podaje tmdb/tmdb_id),
+        # potem awaryjnie z URL (format: plugin://plugin.video.fanfilm/play/movie/<id>)
         tmdb_id = 0
-        if '/play/movie/' in file_path:
+        uniqueid = item.get('uniqueid') or {}
+        for key in ('tmdb_id', 'tmdb'):
+            try:
+                if uniqueid.get(key):
+                    tmdb_id = int(uniqueid[key])
+                    break
+            except (TypeError, ValueError):
+                continue
+        if not tmdb_id and '/play/movie/' in file_path:
             try:
                 tmdb_id = int(file_path.split('/play/movie/')[1].split('/')[0])
             except (ValueError, IndexError):
                 pass
-        elif '/play/show/' in file_path:
+        elif not tmdb_id and '/play/show/' in file_path:
             try:
                 parts = file_path.split('/play/show/')[1].split('/')
                 tmdb_id = int(parts[0]) if parts else 0
             except (ValueError, IndexError):
                 pass
-        
-        # Get unique IDs (tmdb, imdb, etc.) - not available from basic history
-        uniqueid = {}
-        if tmdb_id:
+
+        if not uniqueid and tmdb_id:
             uniqueid['tmdb'] = tmdb_id
         
         # Get resume info - not available from basic history
@@ -170,31 +247,36 @@ class ContinueWatching:
         if mediatype == 'movie':
             return {
                 'type': 'movie',
-                'title': item.get('label', ''),
+                'title': item.get('title') or item.get('label', ''),
                 'year': item.get('year', 0),
                 'plot': item.get('plot', ''),
                 'art': item.get('art', {}),
+                'thumbnail': item.get('thumbnail', ''),
                 'resume': {'position': position, 'total': total},
                 'lastplayed': item.get('lastplayed', ''),
                 'dbid': tmdb_id,
-                'type': 'movie',
-                'tmdb_id': tmdb_id
+                'tmdb_id': tmdb_id,
+                # FanFilm gra po swoim ffid (np. 100283995), nie po tmdb_id
+                'play_path': file_path,
+                'ffid': uniqueid.get('ffid', ''),
             }
         else:  # episode
             return {
                 'type': 'episode',
-                'title': item.get('label', ''),
+                'title': item.get('title') or item.get('label', ''),
                 'showtitle': item.get('showtitle', ''),
                 'season': item.get('season', 0),
                 'episode': item.get('episode', 0),
                 'plot': item.get('plot', ''),
                 'art': item.get('art', {}),
+                'thumbnail': item.get('thumbnail', ''),
                 'resume': {'position': position, 'total': total},
                 'lastplayed': item.get('lastplayed', ''),
                 'dbid': item.get('episodeid', 0),
-                'type': 'episode',
-                'tmdb_id': uniqueid.get('tmdb', 0),
-                'tvshow_tmdb_id': item.get('tvshowid', 0)
+                'tmdb_id': tmdb_id,
+                'tvshow_tmdb_id': item.get('tvshowid', 0),
+                'play_path': file_path,
+                'ffid': uniqueid.get('ffid', ''),
             }
 
     def get_items_list(self, limit=None):
@@ -224,15 +306,17 @@ class ContinueWatching:
                 label += f" ({item['year']})"
             # Use TMDb ID for FanFilm, dbid for Kodi
             play_id = item.get('tmdb_id', item.get('dbid', 0))
-            path = f"plugin://plugin.video.fanfilm/play/movie/{play_id}"
-            icon = item.get('art', {}).get('poster', 'DefaultMovie.png')
-            fanart = item.get('art', {}).get('fanart', '')
+            path = item.get('play_path') or f"plugin://plugin.video.fanfilm/play/movie/{play_id}"
+            tmdb_type = 'movie'
         else:  # episode
             label = f"{item.get('showtitle', '')} S{item['season']:02d}E{item['episode']:02d}"
             play_id = item.get('tmdb_id', item.get('dbid', 0))
-            path = f"plugin://plugin.video.fanfilm/play/show/{play_id}/{item.get('season', 1)}/{item.get('episode', 1)}"
-            icon = item.get('art', {}).get('thumb', item.get('art', {}).get('poster', 'DefaultEpisode.png'))
-            fanart = item.get('art', {}).get('fanart', '')
+            path = item.get('play_path') or f"plugin://plugin.video.fanfilm/play/show/{play_id}/{item.get('season', 1)}/{item.get('episode', 1)}"
+            tmdb_type = 'tv'
+
+        # Art: najpierw to, co zwrocilo zrodlo (FanFilm podaje obrazy TMDb),
+        # a gdy brakuje - poster/fanart z TMDb po tmdb_id.
+        art = self._resolve_art(item, tmdb_type)
 
         resume = item.get('resume', {})
         progress = 0
@@ -244,18 +328,15 @@ class ContinueWatching:
                 progress = int((position / total) * 100)
                 total_time = total
 
+        label_for_display = item.get('label', item.get('title', ''))
+
         return {
-            'label': item.get('label', item.get('title', '')),
+            'label': label_for_display,
             'path': path,
-            'icon': item.get('art', {}).get('poster', item.get('art', {}).get('thumb', 'DefaultVideo.png')),
-            'art': {
-                'icon': item.get('art', {}).get('poster', 'DefaultVideo.png'),
-                'thumb': item.get('art', {}).get('thumb', 'DefaultVideo.png'),
-                'poster': item.get('art', {}).get('poster', 'DefaultVideo.png'),
-                'fanart': fanart
-            },
+            'icon': art.get('poster') or art.get('thumb') or '',
+            'art': art,
             'info': {
-                'title': item.get('label', item.get('title', '')),
+                'title': item.get('title') or label_for_display,
                 'plot': item.get('plot', ''),
                 'mediatype': 'movie' if item['type'] == 'movie' else 'episode',
                 'playcount': 1 if (item.get('resume', {}).get('position', 0) >= (item.get('resume', {}).get('total', 1) * 0.9)) else 0,
@@ -265,3 +346,27 @@ class ContinueWatching:
             'is_folder': False,
             'source': source
         }
+
+    def _resolve_art(self, item, tmdb_type='movie'):
+        """Zbior poster/thumb/fanart/clearlogo; brakujace uzupelnia z TMDb."""
+        raw = item.get('art') or {}
+        poster = _clean_art_url(raw.get('poster') or '')
+        thumb = _clean_art_url(raw.get('thumb') or '')
+        fanart = _clean_art_url(raw.get('fanart') or '')
+        clearlogo = _clean_art_url(raw.get('clearlogo') or '')
+        if not poster:
+            poster = _clean_art_url(item.get('thumbnail') or '') or thumb
+        tmdb_id = item.get('tmdb_id') or 0
+        if (not poster or not fanart) and tmdb_id:
+            tmdb_poster, tmdb_fanart = tmdb_art(tmdb_id, tmdb_type)
+            poster = poster or tmdb_poster
+            fanart = fanart or tmdb_fanart
+        art = {
+            'poster': poster,
+            'thumb': thumb or poster,
+            'fanart': fanart,
+            'icon': poster,
+        }
+        if clearlogo:
+            art['clearlogo'] = clearlogo
+        return {key: value for key, value in art.items() if value}
