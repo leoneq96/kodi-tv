@@ -706,6 +706,7 @@
                     <height>110</height>
                     <font>font_mini_plot</font>
                     <textcolor>dialog_fg_70</textcolor>
+                    <autoscroll>false</autoscroll>
                     <label>$VAR[Hero_Plot]</label>
                 </control>
                 
