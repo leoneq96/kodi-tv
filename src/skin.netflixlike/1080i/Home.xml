@@ -77,6 +77,9 @@
             
             <!-- Row 1: Continue Watching (Kontynuuj oglądanie) -->
             <control type="group" id="9000">
+                <!-- Rzad "Kontynuuj ogladanie" znika, gdy nie ma czego pokazac:
+                     puste container albo pierwsza pozycja bez plakatu (DefaultVideo.png). -->
+                <visible>[!Integer.IsEqual(Container(9001).NumItems,0) + !String.IsEmpty(Container(9001).ListItemAbsolute(0).Art(poster))]</visible>
                 <posx>0</posx>
                 <posy>0</posy>
                 <include content="Row_Header">
