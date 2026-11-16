@@ -767,8 +767,8 @@
             
             <!-- View All Button (right side) -->
             <control type="button" id="$PARAM[button_id]">
-                <posx>1650</posx>
-                <width>150</width>
+                <posx>1580</posx>
+                <width>220</width>
                 <height>40</height>
                 <font>font_mini_bold</font>
                 <textcolor>dialog_fg_70</textcolor>
