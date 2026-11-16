@@ -87,6 +87,7 @@
                     <param name="action">ActivateWindow(Videos,plugin://plugin.video.fanfilm/?action=continue_watching,return)</param>
                     <param name="button_id">9201</param>
                     <param name="list_id">9001</param>
+                    <param name="up_id">9103</param>
                 </include>
                 <control type="list" id="9001">
                     <posx>0</posx>
@@ -160,6 +161,7 @@
                     <param name="label">Popularne</param>
                     <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true,return)</param>
                     <param name="list_id">9011</param>
+                    <param name="up_id">9103</param>
                 </include>
                 <control type="list" id="9011">
                     <posx>0</posx>
@@ -234,6 +236,7 @@
                     <param name="label">Nowości</param>
                     <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true,return)</param>
                     <param name="list_id">9021</param>
+                    <param name="up_id">9203</param>
                 </include>
                 <control type="list" id="9021">
                     <posx>0</posx>
@@ -307,6 +310,7 @@
                     <param name="label">Seriale</param>
                     <param name="action">ActivateWindow(Videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true,return)</param>
                     <param name="list_id">9031</param>
+                    <param name="up_id">9204</param>
                 </include>
                 <control type="list" id="9031">
                     <posx>0</posx>

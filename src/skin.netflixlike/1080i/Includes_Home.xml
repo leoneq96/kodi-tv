@@ -681,8 +681,12 @@
                 <colordiffuse>hero_overlay</colordiffuse>
             </control>
             
-            <!-- Content: Title, Plot, Buttons -->
+            <!-- Content: Title, Plot, Buttons
+                 Widoczne tylko, gdy rzedy sa w pozycji bazowej (fokus w rzedzie 1/2,
+                 na przyciskach hero albo w menu) - przy rzedach 3/4 lista zjezdza
+                 o 260/520 px i nachodzilaby na opis. -->
             <control type="group">
+                <visible>[Control.HasFocus(9001) | Control.HasFocus(9011) | Control.HasFocus(9103) | Control.HasFocus(9104) | Control.HasFocus(9201) | Control.HasFocus(9202) | Control.HasFocus(300)]</visible>
                 <posx>120</posx>
                 <posy>80</posy>
                 <width>800</width>
@@ -781,7 +785,7 @@
                 <visible>!IsEmpty($PARAM[action])</visible>
                 <onleft>$PARAM[list_id]</onleft>
                 <onright>$PARAM[list_id]</onright>
-                <onup>9103</onup>
+                <onup>$PARAM[up_id]</onup>
                 <ondown>$PARAM[list_id]</ondown>
             </control>
         </control>

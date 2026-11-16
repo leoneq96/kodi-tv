@@ -22,12 +22,26 @@ _LABEL_TAG_RE = re.compile(
 _LABEL_DATE_RE = re.compile(r'\s*\[\s*\d{4}[-.]\d{2}[-.]\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?\s*\]')
 
 
+# FanFilm wrzuca do plotu "pasek postepu" z samych liter l, np.
+# "[B][COLOR darkgreen]llllllllllllllll[/COLOR] 100%[/B]".
+_LABEL_PROGRESS_RE = re.compile(r'^\s*l+\s*\d*\s*%?\s*$', re.IGNORECASE | re.MULTILINE)
+
+
 def _clean_label(text):
     """Czysty tytul: bez [COLOR]/[I]/[B] i bez daty w nawiasach."""
     if not text:
         return ''
     text = _LABEL_TAG_RE.sub('', text)
     text = _LABEL_DATE_RE.sub('', text)
+    return ' '.join(text.split())
+
+
+def _clean_plot(text):
+    """Czysty opis: bez tagow i bez paska "llll... 100%" od FanFilmu."""
+    if not text:
+        return ''
+    text = _LABEL_TAG_RE.sub('', text)
+    text = _LABEL_PROGRESS_RE.sub('', text)
     return ' '.join(text.split())
 
 
@@ -267,7 +281,7 @@ class ContinueWatching:
                 'type': 'movie',
                 'title': _clean_label(item.get('title') or item.get('label', '')),
                 'year': item.get('year', 0),
-                'plot': item.get('plot', ''),
+                'plot': _clean_plot(item.get('plot') or ''),
                 'art': item.get('art', {}),
                 'thumbnail': item.get('thumbnail', ''),
                 'resume': {'position': position, 'total': total},
@@ -285,7 +299,7 @@ class ContinueWatching:
                 'showtitle': item.get('showtitle', ''),
                 'season': item.get('season', 0),
                 'episode': item.get('episode', 0),
-                'plot': item.get('plot', ''),
+                'plot': _clean_plot(item.get('plot') or ''),
                 'art': item.get('art', {}),
                 'thumbnail': item.get('thumbnail', ''),
                 'resume': {'position': position, 'total': total},
@@ -355,7 +369,7 @@ class ContinueWatching:
             'art': art,
             'info': {
                 'title': item.get('title') or label_for_display,
-                'plot': item.get('plot', ''),
+                'plot': _clean_plot(item.get('plot') or ''),
                 'mediatype': 'movie' if item['type'] == 'movie' else 'episode',
                 'playcount': 1 if (item.get('resume', {}).get('position', 0) >= (item.get('resume', {}).get('total', 1) * 0.9)) else 0,
                 'progress': progress,
