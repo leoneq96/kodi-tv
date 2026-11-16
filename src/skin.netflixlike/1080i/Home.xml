@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 
+    <defaultcontrol>9001</defaultcontrol>
+
     <include>Action_ButtonMenu_Onload</include>
 
     <include content="Action_Hubs_Onload" condition="String.IsEmpty(Skin.String(Hub.Home.ReplaceWindow))">
@@ -59,7 +61,7 @@
 
     <!-- NetflixLike: ktory rzad karmi hero (fanart/tytul/opis) i przyciski Odtworz/Info.
          Ustawiane przy fokusie listy, zeby hero nie znikalo, gdy fokus wejdzie na przyciski. -->
-    <onload>SetProperty(Hero.RowId,9011,Home)</onload>
+    <onload>SetProperty(Hero.RowId,9001,Home)</onload>
 
     <onload>$VAR[Action_RatingsMonitor]</onload>
 
@@ -70,10 +72,13 @@
         <!-- NetflixLike: Horizontal Rows -->
         <control type="group">
             <posx>60</posx>
-            <posy>440</posy>
-            <!-- NetflixLike: fokus na rzędzie 3/4 -> cala grupa leci w gore, bez animacji -->
-            <animation effect="slide" start="0,0" end="0,-260" time="0" condition="Control.HasFocus(9021)">Conditional</animation>
-            <animation effect="slide" start="0,0" end="0,-520" time="0" condition="Control.HasFocus(9031)">Conditional</animation>
+            <posy>400</posy>
+            <!-- NetflixLike: hero ma 380 px, pierwszy rzad startuje na y=400.
+                 Fokus na rzedzie 2/3/4 -> cala grupa wjezdza w gore o 440 px
+                 na kazdy rzad (10 px zapasu), bez animacji. -->
+            <animation effect="slide" start="0,0" end="0,-440" time="0" condition="[Control.HasFocus(9011) | Control.HasFocus(9202)]">Conditional</animation>
+            <animation effect="slide" start="0,0" end="0,-880" time="0" condition="[Control.HasFocus(9021) | Control.HasFocus(9203)]">Conditional</animation>
+            <animation effect="slide" start="0,0" end="0,-1320" time="0" condition="[Control.HasFocus(9031) | Control.HasFocus(9204)]">Conditional</animation>
             
             <!-- Row 1: Continue Watching (Kontynuuj oglądanie) -->
             <control type="group" id="9000">
@@ -93,7 +98,7 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>200</height>
+                    <height>370</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onfocus>SetProperty(Hero.RowId,9001,Home)</onfocus>
@@ -101,51 +106,37 @@
                     <onright>9201</onright>
                     <onup>9201</onup>
                     <ondown>9011</ondown>
-                    <itemlayout width="145" height="205">
+                    <itemgap>20</itemgap>
+                    <!-- NetflixLike: plakat 200x300 (2:3); podpis tylko pod fokusowanym kafelkiem -->
+                    <itemlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                        </control>
-                        <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12</font>
-                            <textcolor>white</textcolor>
-                            <align>center</align>
-                            <label>$INFO[ListItem.Title]</label>
-                            <maxlines>1</maxlines>
+                            <aspectratio>stretch</aspectratio>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="145" height="205">
+                    <focusedlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                            <include>Animation_Poster_Focus_Zoom</include>
+                            <aspectratio>stretch</aspectratio>
+                            <include>Animation_Row_Focus_Zoom</include>
                         </control>
                         <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12_bold</font>
-                            <textcolor>accent</textcolor>
+                            <posx>-10</posx>
+                            <posy>334</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font_mini_bold</font>
+                            <textcolor>white</textcolor>
+                            <shadowcolor>black</shadowcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
-                        </control>
-                        <control type="image">
-                            <posx>-5</posx>
-                            <posy>-5</posy>
-                            <width>145</width>
-                            <height>205</height>
-                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
-                            <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
                     <content target="widget">plugin://service.netflixlike.helper/widget/continue</content>
@@ -155,7 +146,7 @@
             <!-- Row 2: Popular (Popularne) -->
             <control type="group" id="9010">
                 <posx>0</posx>
-                <posy>260</posy>
+                <posy>440</posy>
                 <include content="Row_Header">
                     <param name="button_id">9202</param>
                     <param name="label">Popularne</param>
@@ -167,7 +158,7 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>200</height>
+                    <height>370</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onfocus>SetProperty(Hero.RowId,9011,Home)</onfocus>
@@ -175,51 +166,37 @@
                     <onright>9202</onright>
                     <onup>9001</onup>
                     <ondown>9021</ondown>
-                    <itemlayout width="145" height="205">
+                    <itemgap>20</itemgap>
+                    <!-- NetflixLike: plakat 200x300 (2:3); podpis tylko pod fokusowanym kafelkiem -->
+                    <itemlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                        </control>
-                        <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12</font>
-                            <textcolor>white</textcolor>
-                            <align>center</align>
-                            <label>$INFO[ListItem.Title]</label>
-                            <maxlines>1</maxlines>
+                            <aspectratio>stretch</aspectratio>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="145" height="205">
+                    <focusedlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                            <include>Animation_Poster_Focus_Zoom</include>
+                            <aspectratio>stretch</aspectratio>
+                            <include>Animation_Row_Focus_Zoom</include>
                         </control>
                         <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12_bold</font>
-                            <textcolor>accent</textcolor>
+                            <posx>-10</posx>
+                            <posy>334</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font_mini_bold</font>
+                            <textcolor>white</textcolor>
+                            <shadowcolor>black</shadowcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
-                        </control>
-                        <control type="image">
-                            <posx>-5</posx>
-                            <posy>-5</posy>
-                            <width>145</width>
-                            <height>205</height>
-                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
-                            <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
                     <content>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;widget=true</content>
@@ -230,7 +207,7 @@
             <!-- Row 3: New Releases (Nowości) -->
             <control type="group" id="9020">
                 <posx>0</posx>
-                <posy>520</posy>
+                <posy>880</posy>
                 <include content="Row_Header">
                     <param name="button_id">9203</param>
                     <param name="label">Nowości</param>
@@ -242,7 +219,7 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>200</height>
+                    <height>370</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onfocus>SetProperty(Hero.RowId,9021,Home)</onfocus>
@@ -250,51 +227,37 @@
                     <onright>9203</onright>
                     <onup>9011</onup>
                     <ondown>9031</ondown>
-                    <itemlayout width="145" height="205">
+                    <itemgap>20</itemgap>
+                    <!-- NetflixLike: plakat 200x300 (2:3); podpis tylko pod fokusowanym kafelkiem -->
+                    <itemlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                        </control>
-                        <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12</font>
-                            <textcolor>white</textcolor>
-                            <align>center</align>
-                            <label>$INFO[ListItem.Title]</label>
-                            <maxlines>1</maxlines>
+                            <aspectratio>stretch</aspectratio>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="145" height="205">
+                    <focusedlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                            <include>Animation_Poster_Focus_Zoom</include>
+                            <aspectratio>stretch</aspectratio>
+                            <include>Animation_Row_Focus_Zoom</include>
                         </control>
                         <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12_bold</font>
-                            <textcolor>accent</textcolor>
+                            <posx>-10</posx>
+                            <posy>334</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font_mini_bold</font>
+                            <textcolor>white</textcolor>
+                            <shadowcolor>black</shadowcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
-                        </control>
-                        <control type="image">
-                            <posx>-5</posx>
-                            <posy>-5</posy>
-                            <width>145</width>
-                            <height>205</height>
-                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
-                            <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
                     <content>plugin://plugin.video.themoviedb.helper/?info=upcoming&amp;tmdb_type=movie&amp;widget=true</content>
@@ -304,7 +267,7 @@
             <!-- Row 4: Series (Seriale) -->
             <control type="group" id="9030">
                 <posx>0</posx>
-                <posy>780</posy>
+                <posy>1320</posy>
                 <include content="Row_Header">
                     <param name="button_id">9204</param>
                     <param name="label">Seriale</param>
@@ -316,7 +279,7 @@
                     <posx>0</posx>
                     <posy>50</posy>
                     <width>1800</width>
-                    <height>200</height>
+                    <height>370</height>
                     <scrolltime>200</scrolltime>
                     <orientation>horizontal</orientation>
                     <onfocus>SetProperty(Hero.RowId,9031,Home)</onfocus>
@@ -324,51 +287,37 @@
                     <onright>9204</onright>
                     <onup>9021</onup>
                     <ondown>9001</ondown>
-                    <itemlayout width="145" height="205">
+                    <itemgap>20</itemgap>
+                    <!-- NetflixLike: plakat 200x300 (2:3); podpis tylko pod fokusowanym kafelkiem -->
+                    <itemlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                        </control>
-                        <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12</font>
-                            <textcolor>white</textcolor>
-                            <align>center</align>
-                            <label>$INFO[ListItem.Title]</label>
-                            <maxlines>1</maxlines>
+                            <aspectratio>stretch</aspectratio>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="145" height="205">
+                    <focusedlayout width="200" height="370">
                         <control type="image">
-                            <width>135</width>
-                            <height>180</height>
+                            <posy>10</posy>
+                            <width>200</width>
+                            <height>300</height>
                             <texture fallback="special://skin/extras/icons/video.png">$INFO[ListItem.Icon]</texture>
-                            <aspectratio>keep</aspectratio>
-                            <include>Animation_Poster_Focus_Zoom</include>
+                            <aspectratio>stretch</aspectratio>
+                            <include>Animation_Row_Focus_Zoom</include>
                         </control>
                         <control type="label">
-                            <posx>0</posx>
-                            <posy>182</posy>
-                            <width>135</width>
-                            <height>22</height>
-                            <font>font12_bold</font>
-                            <textcolor>accent</textcolor>
+                            <posx>-10</posx>
+                            <posy>334</posy>
+                            <width>220</width>
+                            <height>30</height>
+                            <font>font_mini_bold</font>
+                            <textcolor>white</textcolor>
+                            <shadowcolor>black</shadowcolor>
                             <align>center</align>
                             <label>$INFO[ListItem.Title]</label>
                             <maxlines>1</maxlines>
-                        </control>
-                        <control type="image">
-                            <posx>-5</posx>
-                            <posy>-5</posy>
-                            <width>145</width>
-                            <height>205</height>
-                            <texture>special://skin/extras/textures/selectbox_thin.png</texture>
-                            <colordiffuse>accent</colordiffuse>
                         </control>
                     </focusedlayout>
                     <content>plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;widget=true</content>
